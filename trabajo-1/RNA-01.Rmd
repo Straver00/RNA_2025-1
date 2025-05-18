@@ -1,3 +1,8 @@
+---
+output: html_document
+mathjax: default
+---
+
 <center>
 
 ## **Curso: Redes Neuronales Artificiales y Algoritmos Bioinspirados**
@@ -70,8 +75,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Parte 1: Optimización Numérica {#parte-1-optimización-numérica}
 
-Comenzamos importando las librerías necesarias para esta primera mitad.
-```{r import1, message = FALSE}
+```{r import1, message = FALSE, include = FALSE}
 library(lattice)
 library(viridisLite)
 library(GA)
@@ -85,8 +89,7 @@ library(reshape2)
 library(animation)
 ```
 
-Definición de funciones de gráficos y gifs para posterior uso simplificado.
-```{r plot3d_function}
+```{r plot3d_function, include = FALSE,}
 # Función para simplificar producción gráfico 3D
 plot3D_f <- function(x, y, z, input_title){
   # x, y : Coordenadas
@@ -111,7 +114,7 @@ plot3D_f <- function(x, y, z, input_title){
 }
 ```
 
-```{r contour_level_function}
+```{r contour_level_function, include = FALSE}
 # Función para los gráficos de curvas de nivel
 contourLevel <- function(x, y, z, nlevels, title, xlim = NULL, ylim = NULL){
   # x, y : Coordenadas
@@ -134,7 +137,7 @@ contourLevel <- function(x, y, z, nlevels, title, xlim = NULL, ylim = NULL){
 }
 ```
 
-```{r gif_generator}
+```{r gif_generator, include = FALSE}
 # Función para crear el GIF
 makeGIF <- function(array_points, x_seq, y_seq, z_eval, num_levels,
                     title, file_name, interval, sol){
@@ -176,17 +179,21 @@ Se seleccionaron las siguientes funciones de prueba para evaluar los diferentes 
   - Rastrigin.
   - Ronsenbrock.
 
-La función de **Rastrigin** se define como:
-$$
-f(\mathbf{x}) = An + \sum_{i=1}^{n} \left[ x_i^2 - A \cos(2\pi x_i) \right]\, \forall\,\,  x_i \in [-5.12,\ 5.12]
-$$
-donde $A=10$ y $x_i \in [-5.12, 5.12]$. Dicha función cuenta con su mínimo global en $X = [0,0,...,0]$ con un valor de $f(\mathbf{x}) = 0$.
+La función de **Rastrigin** se define a continuación con la ecuación (1):
 
-Luego, la de **Rosenbrock** se define como:
 $$
-f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2  \right]\, \forall\,\,  x_i \in [-\infty,\ \infty]
+f(\mathbf{x}) = An + \sum_{i=1}^{n} \left[ x_i^2 - A \cos(2\pi x_i) \right]\, \forall\,\, x_i \in [-5.12,\ 5.12]\qquad (1)
 $$
-Y esta función cuenta con su mínimo global en $X = [1,1,...,1]$ con un valor de $f(\mathbf{x}) = 0$.
+
+donde $A=10$ y $x_i \in [-5.12, 5.12]$. Dicha función (1) cuenta con su mínimo global en $X = [0,0,...,0]$ con un valor de $f(\mathbf{x}) = 0$.
+
+Luego, la de **Rosenbrock** se define como describe ahora la ecuación (2):
+
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2  \right]\, \forall\,\,  x_i \in [-\infty,\ \infty]\qquad (2)
+$$
+Y esta función (2) cuenta con su mínimo global en $X = [1,1,...,1]$ con un valor de $f(\mathbf{x}) = 0$.
 
 Procedemos ahora a declarar las funciones vectorizadas en R.
 ```{r functions_to_optimize}
@@ -242,12 +249,17 @@ grid$z_ros <- apply(grid, 1, function(row) rosenbrock(c(row["x"], row["y"])))
 ```
 
 Veamos ahora gráficamente como es la función de Rastrigin con entrada y salida 2D → 3D.
-```{r plot3D_rastrigin, fig.align='center', fig.cap="***Fig.1** Superficie de Rastrigin*"}
+<br>
+<br>
+```{r plot3D_rastrigin, fig.align='center', fig.cap="***Fig.1** Superficie de Rastrigin*", echo = FALSE}
 plot3D_f(x, y, z_ras, "Función de Rastrigin")
 ```
 
+<br>
 Igualmente un mapa de calor con curvas de nivel para entender desde otra perspectiva la función.
-```{r rastrigin_heat_map, fig.align='center', fig.cap="***Fig.2** Heatmap de Rastrigin*"}
+<br>
+
+```{r rastrigin_heat_map, fig.align='center', fig.cap="***Fig.2** Heatmap de Rastrigin*", echo = FALSE}
 # Mapa de calor con contornos de Rastrigin
 ggplot(grid, aes(x, y, z = z_ras)) +
   geom_raster(aes(fill = z_ras)) +
@@ -258,20 +270,23 @@ ggplot(grid, aes(x, y, z = z_ras)) +
   theme(plot.title = element_text(hjust = 0.5),
         axis.title.y = element_text(angle = 0, vjust = 0.5, hjust = 0.5))
 ```
-
+<br>
 Ahora un gráfico de curvas de nivel simple para la función de Rastrigin.
 
-```{r rastrigin_contour, fig.align='center', fig.cap="***Fig.3** Levelplot de Rastrigin*"}
+```{r rastrigin_contour, fig.align='center', fig.cap="***Fig.3** Levelplot de Rastrigin*", , echo = FALSE}
 contourLevel(x, y, z_ras, nlevels = 10, "Curvas de nivel de la función de Rastrigin")
 ```
-
+<br>
 Hacemos lo mismo con la función de Rosenbrock para tener una idea general.
+<br>
+<br>
 
-```{r plot3D_rosenbrock, fig.align='center', fig.cap="***Fig.4** Superficie de Rosenbrock*"}
+```{r plot3D_rosenbrock, fig.align='center', fig.cap="***Fig.4** Superficie de Rosenbrock*", echo = FALSE}
 plot3D_f(x, y, z_ros, "Función de Rosenbrock")
 ```
 
-```{r rosenbrock_heat_map, fig.align='center', fig.cap="***Fig.5** Heatmap de Rosenbrock*"}
+<br>
+```{r rosenbrock_heat_map, fig.align='center', fig.cap="***Fig.5** Heatmap de Rosenbrock*", echo = FALSE}
 # Mapa de calor con contornos de Rosenbrock
 ggplot(grid, aes(x, y, z = z_ros)) +
   geom_raster(aes(fill = z_ros)) +
@@ -283,10 +298,10 @@ ggplot(grid, aes(x, y, z = z_ros)) +
         axis.title.y = element_text(angle = 0, vjust = 0.5, hjust = 0.5))
 ```
 
-```{r rosenbrock_contour, fig.align='center', fig.cap="***Fig.6** Levelplot de Rosenbrock*"}
+```{r rosenbrock_contour, fig.align='center', fig.cap="***Fig.6** Levelplot de Rosenbrock*", , echo = FALSE}
 contourLevel(x, y, z_ros, nlevels = 36, "Curvas de nivel de la función de Rosenbrock")
 ```
-
+<br>
 Con las funciones presentadas y teniendo claro su topografía, además del espacio de búsqueda; procedemos con las optimizaciones.
 
 ## Optimización {#optimización-en-dos-y-tres-dimensiones}
@@ -407,7 +422,6 @@ grad_rastrigin <- function(x) {
 }
 ```
 
-
 Comenzamos con la solución para 2 dimensiones base, o sea *f(x,y)*:
 
 ```{r gd_rastrigin2D}
@@ -424,7 +438,7 @@ Con un valor óptimo de {gd_ras$value}."))
 
 Veamos como se ve la solución hallada en un gráfico de curvas de nivel, donde la **solución óptima real está representada como un punto verde** y la del **método de optimización con un punto rojo**:
 
-```{r gd_rastrigin2D_contour, fig.align='center', fig.cap="***Fig.7** GD Rastrigin*"}
+```{r gd_rastrigin2D_contour, fig.align='center', fig.cap="***Fig.7** GD Rastrigin*", echo = FALSE}
 contourLevel(x, y, z_ras, nlevels = 10, title = "Solución Descenso por Gradiente vs Exacta\nRastrigin",
              xlim = c(-3.5, 3.5), ylim = c(-3.5, 3.5))
 points(gd_ras$min[1],gd_ras$min[2], pch = 19, col = "red", lwd = 1)
@@ -435,7 +449,7 @@ Se puede ver que a pesar de todos los reinicios e iteraciones del método, este 
 
 Veamos ahora para 3 dimensiones base, o sea *f(x,y,z)*:
 
-```{r gd_rastrigin3D}
+```{r gd_rastrigin3D, echo = FALSE}
 set.seed(2)
 vec <- runif(3, min = -5.12, max = 5.12)
 gd_ras <- gradient_descent_mod(rastrigin, grad_rastrigin,
@@ -446,7 +460,6 @@ print(glue("\nLa mejor solución hallada está en:
 Con un valor óptimo de {gd_ras$value}"))
 ```
 Ese valor óptimo hallado en 3D, si analizamos las coordenadas (x, y, z) vemos que se aproxima al mínimo global, por lo que en esta ocasión el método lo hizo bien.
-
 <br>
 #### Rosenbrock
 
@@ -462,7 +475,7 @@ grad_rosenbrock2D <- function(x) {
 ```
 
 Aplicamos ahora si la optimización en 2D.
-```{r gd_rosenbrock2D}
+```{r gd_rosenbrock2D, echo = FALSE}
 set.seed(2)
 vec <- runif(2, min = -5.12, max = 5.12)
 gd_ros <- gradient_descent_mod(rosenbrock, grad_rosenbrock2D, x0 = vec, eta = 0.001)
@@ -473,7 +486,7 @@ Con un valor óptimo de {gd_ros$value}"))
 
 Veamos gráficamente el resultado para este caso, siguiendo la convención anterior para el óptimo real y el óptimo del método.
 
-```{r gd_rosenbrock2D_countour, fig.align='center', fig.cap="***Fig.8** GD Rosenbrock*"}
+```{r gd_rosenbrock2D_countour, fig.align='center', fig.cap="***Fig.8** GD Rosenbrock*", echo = FALSE}
 contourLevel(x, y, z_ros, nlevels = 4000, title = "Solución Descenso por Gradiente vs Exacta\nRosenbrock",
              xlim = c(0.5, 1.5), ylim = c(0.5, 1.5))
 points(gd_ros$min[1],gd_ros$min[2], pch = 25, col = "red", lwd = 2)
@@ -483,7 +496,7 @@ En este caso si convergió bien el método del gradiente con un punto inicial al
 
 Ejecutemos ahora el caso 3D.
 
-```{r grad_rosenbrock3D}
+```{r grad_rosenbrock3D, echo = FALSE}
 # Gradiente de la función de Rosenbrock en 3D
 grad_rosenbrock3D <- function(x) {
   dx1 <- -400 * x[1] * (x[2] - x[1]^2) - 2 * (1 - x[1])
@@ -544,7 +557,7 @@ print(glue("Mejor solución encontrada:
 x = {genetic_rastri@solution[1]}
 Con un valor óptimo de {genetic_rastri@fitnessValue} en {genetic_rastri@iter} iteraciones"))
 ```
-```{r ga_rastrgin_plot, fig.align='center', fig.cap="***Fig.9** GA Rastrigin 1D*"}
+```{r ga_rastrgin_plot, fig.align='center', fig.cap="***Fig.9** GA Rastrigin 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ras, type = "l", col = "blue", lwd = 2,
      main = "Solución Algoritmo Evolutivo vs Exacta\nRastrigin",
@@ -557,7 +570,7 @@ Vemos que no supone mayor dificultad para el método hallar una solución exacta
 
 Procedemos con la de Rastrigin 2D, considerando diversos argumentos de la función.
 
-```{r ga_rastrigin2D}
+```{r ga_rastrigin2D, echo = FALSE}
 genetic_rastri <- ga(
   type = "real-valued",
   fitness = function(x){return(-rastrigin(x))},
@@ -579,7 +592,7 @@ print(glue("Mejor solución encontrada:
 Con un valor óptimo de {genetic_rastri@fitnessValue} en {genetic_rastri@iter} iteraciones"))
 ```
 
-```{r ga_rastrigin_contour, fig.align='center', fig.cap="***Fig.10** GA Rastrigin 2D*"}
+```{r ga_rastrigin_contour, fig.align='center', fig.cap="***Fig.10** GA Rastrigin 2D*", echo = FALSE}
 contourLevel(x, y, z_ras, nlevels = 30, "Solución Algoritmo Evolutivo vs Exacta\nRastrigin",
              xlim = c(-0.5, 0.5), ylim = c(-0.5, 0.5))
 points(genetic_rastri@solution[1],genetic_rastri@solution[2],
@@ -589,7 +602,7 @@ points(0, 0, col = "green", pch = 19, lwd = 1)
 Nuevamente, la solución hallada es exacta para este caso de 2 dimensiones de entrada.
 
 Veamos que tal con la versión 3D.
-```{r ga_rastrigin3D}
+```{r ga_rastrigin3D, echo = FALSE}
 genetic_rastri <- ga(
   type = "real-valued",
   fitness = function(x) -rastrigin(x),
@@ -611,9 +624,9 @@ De nuevo, solución perfectamente exacta.
 
 #### Rosenbrock
 
-Es momento de evaluar ahora que tal le va al método con la de Rosenbrock, si logrará la misma exactitud que con Rastrigin.
+Es momento de evaluar ahora que tal le va al método con la de Rosenbrock, si logrará la misma exactitud que con Rastrigin. Comenzado de nuevo entonces con el caso 1D.
 
-```{r ga_rosenbrock1D}
+```{r ga_rosenbrock1D, echo = FALSE}
 genetic_rosen <- ga(
   type = "real-valued",
   fitness = function(x){return(-rosenbrock_2d(c(x, 1)))},
@@ -635,7 +648,7 @@ x = {genetic_rosen@solution[1]}
 Con un valor óptimo de {genetic_rosen@fitnessValue} en {genetic_rosen@iter} iteraciones"))
 ```
 
-```{r ga_rosenbrock_plot, fig.align='center', fig.cap="***Fig.11** GA Rosenbrock 1D*"}
+```{r ga_rosenbrock_plot, fig.align='center', fig.cap="***Fig.11** GA Rosenbrock 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ros, type = "l", col = "blue", lwd = 2,
      main = "Solución Algoritmo Evolutivo vs Exacta\nRosenbrock",
@@ -647,7 +660,7 @@ points(1, 0, col = "green", pch = 19, lwd = 1)
 Se obtiene una solución que a términos prácticos es exacta.
 
 Luego, para el caso 2D de Rosenbrock
-```{r ga_rosenbrock2D}
+```{r ga_rosenbrock2D, echo = FALSE}
 genetic_rosen <- ga(
   type = "real-valued",
   fitness = function(x) -rosenbrock(x),
@@ -666,7 +679,7 @@ print(glue("Mejor solución encontrada:
 Con un valor óptimo de {genetic_rosen@fitnessValue} en {genetic_rosen@iter} iteraciones"))
 ```
 
-```{r ga_rosenbrock_contour, fig.align='center', fig.cap="***Fig.12** GA Rosenbrock 2D*"}
+```{r ga_rosenbrock_contour, fig.align='center', fig.cap="***Fig.12** GA Rosenbrock 2D*", echo = FALSE}
 contourLevel(x, y, z_ros, nlevels = 4000, "Solución Algoritmo Evolutivo vs Exacta\nRosenbrock",
              xlim = c(0.5, 1.5), ylim = c(0.5, 1.5))
 points(genetic_rosen@solution[1],genetic_rosen@solution[2],
@@ -677,7 +690,7 @@ Continua siendo muy buena la solución sin problema alguno.
 
 Ahora el de Rosenbrock 3D.
 
-```{r ga_rosenbrock3D}
+```{r ga_rosenbrock3D, echo = FALSE}
 genetic_rosen <- ga(
   type = "real-valued",
   fitness = function(x) -rosenbrock(x),
@@ -723,7 +736,7 @@ x = {ras_optim$par[1]}, con f(x) = {ras_optim$value}.
 Usando {ras_optim$counts['iteration']} iteraciones."))
 ```
 
-```{r pso_rastrigin_plot, fig.align='center', fig.cap="***Fig.13** PSO Rastrigin 1D*"}
+```{r pso_rastrigin_plot, fig.align='center', fig.cap="***Fig.13** PSO Rastrigin 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ras, type = "l", col = "blue", lwd = 2,
      main = "Solución PSO vs Exacta\nRastrigin",
@@ -734,7 +747,7 @@ points(0, 0, col = "green", pch = 19, lwd = 1)
 ```
 La solucion númerica se aproxima lo suficientemente bien para ser gráficamente perfecta.
 
-```{r pso_rastrigin2d}
+```{r pso_rastrigin2d, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones y 50 miembros
 ras_optim = psoptim(par = rep(NA, 2), fn = rastrigin,
@@ -748,7 +761,7 @@ Usando {ras_optim$counts['iteration']} iteraciones."))
 
 Veamos en una gráfica de curvas de nivel la solución hallada:
 
-```{r pso_rastrigin_contour, fig.align='center', fig.cap="***Fig.14** PSO Rastrigin 2D*"}
+```{r pso_rastrigin_contour, fig.align='center', fig.cap="***Fig.14** PSO Rastrigin 2D*", echo = FALSE}
 contourLevel(x, y, z_ras, nlevels = 30, "Solución PSO vs Exacta\nRastrigin",
              xlim = c(-0.5, 0.5), ylim = c(-0.5, 0.5))
 points(ras_optim$par[1], ras_optim$par[2], pch = 25, col = "red", lwd = 2)
@@ -756,7 +769,7 @@ points(0,0, col = "green", pch = 19, lwd = 1)
 ```
 Continuamos con una solución óptima del método, suficientemente buena gráficamente, con un error despreciable.
 
-```{r pso_ras_3d}
+```{r pso_ras_3d, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
 ras_optim = psoptim(par = rep(NA, 3), fn = rastrigin,
@@ -773,7 +786,7 @@ Se sigue aproximando decentemente, pero ya empieza a resultarle más complicado 
 
 #### Rosenbrock
 
-```{r pso_rosenbrock1D}
+```{r pso_rosenbrock1D, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
 ros_optim = psoptim(par = rep(NA, 2), fn = rosenbrock_2d,
@@ -785,7 +798,7 @@ print(glue("La mejor solución hallada es:
            Usando {ras_optim$counts['iteration']} iteraciones."))
 ```
 
-```{r pso_rosenbrock_plot, fig.align='center', fig.cap="***Fig.15** PSO Rosenbrock 1D*"}
+```{r pso_rosenbrock_plot, fig.align='center', fig.cap="***Fig.15** PSO Rosenbrock 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ros, type = "l", col = "blue", lwd = 2,
      main = "Solución PSO vs Exacta\nRosenbrock",
@@ -798,7 +811,7 @@ No le cuesta mucho en 1D aproximarse bien, pero de primeras no logra el mismo ni
 
 Ahora veamos el resultado de optimizar la de Rosenbrock 2 variables.
 
-```{r pso_rosenbrock2D}
+```{r pso_rosenbrock2D, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
 ros_optim = psoptim(par = rep(NA, 2), fn = rosenbrock,
@@ -810,7 +823,7 @@ x = {ros_optim$par[1]}, y = {ros_optim$par[2]}, con f(x,y) = {ros_optim$value}.
 Usando {ras_optim$counts['iteration']} iteraciones."))
 ```
 
-```{r pso_rosenbrock_contour, fig.align='center', fig.cap="***Fig.16** PSO Rosenbrock 2D*"}
+```{r pso_rosenbrock_contour, fig.align='center', fig.cap="***Fig.16** PSO Rosenbrock 2D*", echo = FALSE}
 contourLevel(x, y, z_ros, nlevels = 4000, "Solución PSO vs Exacta\nRosenbrock",
              xlim = c(0.5, 1.5), ylim = c(0.5, 1.5))
 points(ros_optim$par[1], ros_optim$par[2], pch = 25, col = "red", lwd = 2)
@@ -819,7 +832,7 @@ points(1,1, col = "green", pch = 19, lwd = 1)
 <br>
 
 Ahora veamos el resultado de optimizar la de Rosenbrock con variables *x,y,z*.
-```{r pso_rosenbrock3D}
+```{r pso_rosenbrock3D, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
 ros_optim = psoptim(par = rep(NA, 3), fn = rosenbrock,
@@ -876,7 +889,7 @@ print(glue("Valor óptimo Rastrigin 1D → f* = {de_rastri$optim$bestval}.
            Usando {de_rastri$optim$iter} iteraciones."))
 ```
 
-```{r de_rastrgin_plot, fig.align='center', fig.cap="***Fig.17** DE Rastrigin 1D*"}
+```{r de_rastrgin_plot, fig.align='center', fig.cap="***Fig.17** DE Rastrigin 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ras, type = "l", col = "blue", lwd = 2,
      main = "Solución Evolución Diferencial vs Exacta\nRastrigin",
@@ -888,7 +901,7 @@ points(0, 0, col = "green", pch = 19, lwd = 1)
 Empieza bien, pero no precisamente con la mayor de las exactitudes de todos los métodos.
 
 Proseguimos optimizando la función en 2D.
-```{r de_rastrigin2D}
+```{r de_rastrigin2D, echo = FALSE}
 set.seed(2)
 de_rastri <- DEoptim(
   fn      = rastrigin,
@@ -902,7 +915,7 @@ Obtenido en (x,y) = ({de_rastri$optim$bestmem[1]}, {de_rastri$optim$bestmem[2]})
 Usando {de_rastri$optim$iter} iteraciones."))
 ```
 Evaluemos la calidad de la solución visualmente con una gráfica de contornos de nivel.
-```{r de_rastrigin_contour, fig.align='center', fig.cap="***Fig.18** DE Rastrigin 2D*"}
+```{r de_rastrigin_contour, fig.align='center', fig.cap="***Fig.18** DE Rastrigin 2D*", echo = FALSE}
 best_point <- de_rastri$optim$bestmem
 
 contourLevel(x, y, z_ras, nlevels = 30, "Solución Evolución Diferencial vs Exacta\nRastrigin",
@@ -913,7 +926,7 @@ points(0, 0, col = "green", pch = 19, lwd = 1)
 Aquí ya se aprecia ligeramente mayor desviación en la solución hallada.
 
 Veamos ahora como le va para el caso de tres variables de entrada.
-```{r de_rastrigin3D}
+```{r de_rastrigin3D, echo = FALSE}
 # Optimización de la función Rastrigin en 3D
 set.seed(2)
 de_rastri<- DEoptim(
@@ -933,7 +946,7 @@ Como era de esperar, cada vez le resulta más costoso mejorar la solución en Ra
 
 Continuamos ahora con la optimización por evolución diferencial para la de Rosenbrock en 1D.
 
-```{r de_rosenbrock1D}
+```{r de_rosenbrock1D, echo = FALSE}
 set.seed(2)
 de_rosen <- DEoptim(
   fn      = function(x){return(rosenbrock_2d(c(x,1)))},
@@ -947,7 +960,7 @@ Obtenido en x = {de_rosen$optim$bestmem[1]}.
 Usando {de_rosen$optim$iter} iteraciones."))
 ```
 
-```{r de_rosenbrock_plot, fig.align='center', fig.cap="***Fig.19** DE Rosenbrock 1D*"}
+```{r de_rosenbrock_plot, fig.align='center', fig.cap="***Fig.19** DE Rosenbrock 1D*", echo = FALSE}
 # Graficar la curva
 plot(x, f_ros, type = "l", col = "blue", lwd = 2,
      main = "Solución Evolución Diferencial vs Exacta\nRosenbrock",
@@ -960,7 +973,7 @@ Vemos que la evolución diferencial arranca teniendo un resultado exacto en el a
 
 Ahora bien, veamos si el buen desempeño se mantiene con una entrada 2D.
 
-```{r de_rosenbrock2D}
+```{r de_rosenbrock2D, echo = FALSE}
 set.seed(2)
 de_rosen <- DEoptim(
   fn      = rosenbrock,
@@ -974,7 +987,7 @@ Obtenido en (x,y) = ({de_rosen$optim$bestmem[1]}, {de_rosen$optim$bestmem[2]}).
 Usando {de_rosen$optim$iter} iteraciones."))
 ```
 
-```{r de_rosenbrock_contour, fig.align='center', fig.cap="***Fig.20** DE Rosenbrock 2D*"}
+```{r de_rosenbrock_contour, fig.align='center', fig.cap="***Fig.20** DE Rosenbrock 2D*", echo = FALSE}
 best_point <- de_rosen$optim$bestmem
 
 contourLevel(x, y, z_ros, nlevels = 4000, "Solución Evolución Diferencial vs Exacta\nRosenbrock",
@@ -985,7 +998,7 @@ points(1, 1, col = "green", pch = 19, lwd = 1)
 El método continua produciendo un muy buen resultado con esta función.
 
 Veamos que tal con entrada 3D *(x, y, z)*.
-```{r de_rosenbrock3D}
+```{r de_rosenbrock3D, echo = FALSE}
 # Optimización de la función Rosenbrock en 3D
 set.seed(2)
 de_rosen <- DEoptim(
@@ -1012,7 +1025,7 @@ Para poder generar los gifs, es necesario activar el monitoreo o trazabilidad de
 ### Descenso por gradiente {#gif-descenso-gradiente}
 
 Comenzamos produciendo el GIF para Rastrigin.
-```{r gif_gd_ras, warning = FALSE, eval = FALSE}
+```{r gif_gd_ras, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2)
 vec <- runif(2, min = -5.12, max = 5.12)
 gd_ras_gif <- gradient_descent_mod(rastrigin, grad_rastrigin, x0 = vec, eta = 0.001)
@@ -1040,7 +1053,7 @@ Se aprecia inmediatamente que el método convergió muy rápido, pero a un **mí
 <br>
 
 Miramos el GIF de Rosenbrock con gradiente.
-```{r gif_gd_ros, warning = FALSE, eval = FALSE}
+```{r gif_gd_ros, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2)
 vec <- runif(2, min = -5.12, max = 5.12)
 gd_ros_gif <- gradient_descent_mod(rosenbrock, grad_rosenbrock2D, x0 = vec, eta = 0.001)
@@ -1072,12 +1085,12 @@ makeGIF(positions, x, y, z_ros, 40,
 Recordando que acorde al código, debido a la enorme cantidad de iteraciones del método de gradiente, se tomaron iteraciones en pasos grandes; se puede observar que aunque son muchas iteraciones, logra alcanzar el mínimo global. Esto sumado a las ejecuciones iniciales de experimentación, denota que la función de Rosenbrock, tiene una topografía que no perjudica tanto al método, si lo comparamos con la de Rastrigin por ejemplo.
 <br>
 
-***NOTA*: Para los GIF de los métodos heurísticos, se emplean 20 miembros de población y 100 iteraciones.*
+**NOTA**: Para los GIF de los métodos heurísticos, se emplean 20 miembros de población y 100 iteraciones.
 
 ### Algoritmos evolutivos {#gif-algoritmos-evolutivos}
 
 Para poder guardar los puntos de cada población en cada iteracioń con la librería `GA` es necesario crear previamente una función de monitoreo, y luego pasarla a los argumentos de la función `ga`.
-```{r gif_ga_ras, warning = FALSE, eval = FALSE}
+```{r gif_ga_ras, warning = FALSE, eval = FALSE, echo = FALSE}
 # Creamos lista global para guardar los puntos por generación
 poblacion_por_gen <- list()
 
@@ -1117,10 +1130,11 @@ makeGIF(positions, x, y, z_ras, 10, "GA en Rastrigin - Iteración",
 ***Gif.3** Proceso Evolutivo Rastrigin*
 </center>
 
+<br>
 Se aprecia que hay puntos que llegan al mínimo global, pero al final de las iteraciones, varios miembros permanecieron en mínimos locales, aquí la ventaja de obtener la buena solución es por el almacenamiento de las coordenadas que dan el mejor valor detectado al final del algoritmo.
 
 Veamos ahora para Rosenbrock con GA.
-```{r gif_ga_ros, warning = FALSE, eval = FALSE}
+```{r gif_ga_ros, warning = FALSE, eval = FALSE, echo = FALSE}
 # Creamos lista global para guardar los puntos por generación
 poblacion_por_gen <- list()
 
@@ -1160,6 +1174,7 @@ makeGIF(positions, x, y, z_ros, 40, "GA en Rosenbrock - Iteración",
 ***Gif.4** Proceso Evolutivo Rosenbrock*
 </center>
 
+<br>
 Se aprecia que los miembros de la población a medida que pasan las iteraciones, se van acercando muy suavemente al óptimo, sin dejar de existir puntos que realizan exploraciones para no sesgar la población en un camino evolutivo.
 
 ### Enjambres de partículas {#gif-enjambres-partículas}
@@ -1172,7 +1187,7 @@ Para poder activar el monitoreo que trae la función de librería, es necesario 
   
 Si alguno de estos no se tiene activado, el monitoreo solo tomará datos de cada cierto número de iteraciones, o tomará solo los valores de las soluciones y no los puntos.
 
-```{r gif_ras_pso, message = FALSE, warning = FALSE, eval = FALSE}
+```{r gif_ras_pso, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2)
 result_rastrigin <- psoptim(
   par = rep(NA, 2),
@@ -1209,7 +1224,7 @@ El método converge bastante bien, sin dejar de tener individuos en búsqueda co
 <br>
 
 Produzcamos ahora el GIF para Rosenbrock.
-```{r gif_ros_pso, message = FALSE, warning = FALSE, eval = FALSE}
+```{r gif_ros_pso, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2)
 result_rosenbrock <- psoptim(
   par = rep(NA, 2),
@@ -1248,8 +1263,7 @@ Particularmente en la función de Rosenbrock, aunque el método de enjambre va c
 
 Esta función solo requiere setear los argumentos `storepopfrom` y `storepopfreq` para guardar los puntos de población en cada iteración, y se accede a ellos por medio del atributo `$member` del objeto.
 
-Comenzamos primero, con la estructura de control.
-```{r de_control}
+```{r de_control, echo = FALSE}
 ctrl <- DEoptim.control(
   NP      = 20,
   itermax = 100,
@@ -1261,7 +1275,7 @@ ctrl <- DEoptim.control(
 )
 ```
 
-```{r gif_de_ras, message = FALSE, warning = FALSE, eval = FALSE}
+```{r gif_de_ras, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2) 
 de_rastri <- DEoptim(
   fn      = rastrigin,
@@ -1294,7 +1308,7 @@ makeGIF(positions, x, y, z_ras, 10, "DE en Rastrigin - Iteración",
 Por ejemplo en este GIF se aprecia la importancia del tamaño de población, sin individuos suficientes en constante búsqueda, el algoritmo se estancaría fácilmente en un óptimo local. Aquí también se aprecia como miembros de la población van migrando a diversos mínimos de la función, haciendo uso del distintivo del algoritmo, que es la comparación por diferencias.
 
 Finalizamos los GIFs con el de Rosenbrock.
-```{r gif_de_ros, message = FALSE, warning = FALSE, eval = FALSE}
+```{r gif_de_ros, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
 set.seed(2) 
 de_rosen <- DEoptim(
   fn      = rosenbrock,
@@ -1327,18 +1341,113 @@ Se resalta la alta, rápida y organizada convergencia del método de evolución 
 
 ## Heuristícos VS Descenso por gradiente {#métodos-heurísticos-vs-métodos-de-descenso-por-gradiente}
 
-Para tener una herramienta previo al análisis final, se va establecer una métrica comparativa (entendiendo las simplificaciones que esto implica por la diversidad de métodos), en la que se va a medir el error en optimización promedio de cada método, para cada función, y este error se va a ponderar en función de la cantidad media de evaluaciones de la F.O e iteraciones del método. Más explicitamente:
+Para tener una herramienta previa al análisis final, se va establecer una métrica comparativa (entendiendo las simplificaciones que esto implica por la diversidad de métodos), en la que se va a medir el error en optimización promedio de cada método, para cada función, y este error se va a ponderar en función de la cantidad media de evaluaciones de la F.O e iteraciones del método. Más explicitamente como indica la ecuación (3):
 
 $$
-\text{Métrica de ineficiencia} = \overline{|{\text{error}}|} \times \overline{\text{iteraciones}} \times \overline{\text{evaluaciones}}
+\text{Métrica de ineficiencia} = \overline{|{\text{error}}|} \times \overline{\text{iteraciones}} \times \overline{\text{evaluaciones}} \qquad (3)
 $$
 Para esto vamos a correr en un ciclo definido **for**, los 3 métodos heurísticos con **100 semillas diferentes de aleatoriedad**, recopilaremos los resultados, obtendremos el promedio de cada factor, y con ellos calcularemos la métrica. La prueba será con las funciones a 3 variables de entrada, para mayor exigencia, y como parámetros lo estableceremos con 50 miembros de población y 100 iteraciones límite.
 
+```{r simluations_function, include = FALSE}
+run_simulation <- function(number_runs, ref_function){
+  
+  # Listas para los datos
+  ga_error <- vector("list", 100)
+  ga_iter <- vector("list", 100)
+  ga_eval <- vector("list", 100)
+  
+  pso_error <- vector("list", 100)
+  pso_iter <- vector("list", 100)
+  pso_eval <- vector("list", 100)
+  
+  de_error <- vector("list", 100)
+  de_iter <- vector("list", 100)
+  de_eval <- vector("list", 100)
+  
+  # Simulación con 'n' semillas diferentes
+  for (i in 1:number_runs) {
+    # GA
+    set.seed(i)
+    ga_i <- ga(
+      type = "real-valued",
+      fitness = function(x){return(-ref_function(x))},
+      lower = rep(-5.12, 3),
+      upper = rep(5.12, 3),
+      popSize = 50,
+      maxiter = 100,
+      monitor = FALSE
+    )
+    ga_error[[i]] <- abs(ga_i@fitnessValue)
+    ga_iter[[i]] <- ga_i@iter
+    # No hay método directo, toca calcularlo así
+    ga_eval[[i]] <- ga_i@popSize * ga_i@iter
+    
+    # PSO
+    set.seed(i)
+    pso_i <- psoptim(
+      par = rep(NA, 3),
+      fn = ref_function,
+      control = list(maxit = 100, s = 50),
+      lower = rep(-5.12, 3), upper = rep(5.12, 3)
+    )
+    pso_error[[i]] <- abs(pso_i$value)
+    pso_iter[[i]] <- pso_i$counts["iteration"]
+    pso_eval[[i]] <- pso_i$counts["function"]
+    
+    # DE
+    set.seed(i)
+    de_i <- DEoptim(
+      fn      = ref_function,
+      lower   = rep(-5.12, 3), upper = rep(5.12, 3),
+      control = ctrl
+    )
+    de_error[[i]] <- abs(de_i$optim$bestval)
+    de_iter[[i]] <- de_i$optim$iter
+    de_eval[[i]] <- de_i$optim$nfeval
+  }
+  
+  # Calculamos la métrica
+  metric_ga = prod(sapply(list(ga_error, ga_iter, ga_eval), function(x) mean(unlist(x))))
+  metric_pso = prod(sapply(list(pso_error, pso_iter, pso_eval), function(x) mean(unlist(x))))
+  metric_de = prod(sapply(list(de_error, de_iter, de_eval), function(x) mean(unlist(x))))
+  return(list(metric_ga, metric_pso, metric_de))
+}
+```
+
+```{r barplot_simluation, include = FALSE}
+barplot_simuluation <- function(results, str_title, exp = FALSE){
+  # Verificamos si se solicita escala logaritmica por diferencias exponenciales
+    if (exp == TRUE) {
+    valor <- round(log(c(results[[1]], results[[2]], results[[3]])), 3)
+  } else {
+    valor <- round(c(results[[1]], results[[2]], results[[3]]), 3)
+  }
+  
+  # Creamos un data frame
+  datos <- data.frame(
+    categoria = c("GA", "PSO", "DE"),
+    valor = valor
+    )
+  
+  colors <- c("GA" = "#A9DFBF", "PSO" = "#AED6F1", "DE" = "#FFD7B5")
+  
+  # Gráfico de barras
+  ggplot(datos, aes(x = categoria, y = valor, fill = categoria)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = valor), vjust = -0.5) +
+    scale_fill_manual(values = colors) +
+    labs(title = str_title,
+         x = "Métodos",
+         y = "Ineficiencia") +
+    theme_minimal() +
+    theme(legend.position = "none")
+}
+```
+
 ### Rastrigin {#simulación-rastrigin}
 
-```{r simulation_rastrigin}
-n_runs <- 100
-
+Ejecutemos la simulación para la función de Rastrigin dada por la ecuación (1) y veamos los resultados:
+```{r simulation_rastrigin, fig.align='center', fig.cap="***Fig.21** Comparación Rastrigin*"}
 # Estructura de control para evolución diferencial
 ctrl <- DEoptim.control(
   NP      = 50,
@@ -1346,181 +1455,21 @@ ctrl <- DEoptim.control(
   trace   = FALSE,  
 )
 
-# Listas para los datos
-ga_error <- vector("list", 100)
-ga_iter <- vector("list", 100)
-ga_eval <- vector("list", 100)
-
-pso_error <- vector("list", 100)
-pso_iter <- vector("list", 100)
-pso_eval <- vector("list", 100)
-
-de_error <- vector("list", 100)
-de_iter <- vector("list", 100)
-de_eval <- vector("list", 100)
-
-# Simulación con 100 semillas diferentes
-for (i in 1:n_runs) {
-  # GA
-  set.seed(i)
-  ga_i <- ga(
-    type = "real-valued",
-    fitness = function(x){return(-rastrigin(x))},
-    lower = rep(-5.12, 3),
-    upper = rep(5.12, 3),
-    popSize = 50,
-    maxiter = 100,
-    monitor = FALSE
-  )
-  ga_error[[i]] <- abs(ga_i@fitnessValue)
-  ga_iter[[i]] <- ga_i@iter
-  # No hay método directo, toca calcularlo así
-  ga_eval[[i]] <- ga_i@popSize * ga_i@iter
-  
-  # PSO
-  set.seed(i)
-  pso_i <- psoptim(
-    par = rep(NA, 3),
-    fn = rastrigin,
-    control = list(maxit = 100, s = 50),
-    lower = rep(-5.12, 3), upper = rep(5.12, 3)
-  )
-  pso_error[[i]] <- abs(pso_i$value)
-  pso_iter[[i]] <- pso_i$counts["iteration"]
-  pso_eval[[i]] <- pso_i$counts["function"]
-  
-  # DE
-  set.seed(i)
-  de_i <- DEoptim(
-    fn      = rastrigin,
-    lower   = rep(-5.12, 3), upper = rep(5.12, 3),
-    control = ctrl
-  )
-  de_error[[i]] <- abs(de_i$optim$bestval)
-  de_iter[[i]] <- de_i$optim$iter
-  de_eval[[i]] <- de_i$optim$nfeval
-}
-
-# Calculamos la métrica
-metric_ga = prod(sapply(list(ga_error, ga_iter, ga_eval), function(x) mean(unlist(x))))
-metric_pso = prod(sapply(list(pso_error, pso_iter, pso_eval), function(x) mean(unlist(x))))
-metric_de = prod(sapply(list(de_error, de_iter, de_eval), function(x) mean(unlist(x))))
-```
-
-Veamos gráficamente los resultados de la simulación con Rastrigin.
-
-```{r barplot_rastrigin, fig.align='center', fig.cap="***Fig.21** Comparación Rastrigin*"}
-# Creamos un data frame
-datos <- data.frame(
-  categoria = c("GA", "PSO", "DE"),
-  valor = round(c(metric_ga, metric_pso, metric_de),3)
-)
-
-colors <- c("GA" = "#A9DFBF", "PSO" = "#AED6F1", "DE" = "#FFD7B5")
-
-# Gráfico de barras
-ggplot(datos, aes(x = categoria, y = valor, fill = categoria)) +
-  geom_bar(stat = "identity") +
-  geom_text(aes(label = valor), vjust = -0.5) +
-  scale_fill_manual(values = colors) +
-  labs(title = "Métrica de ineficiencia - Rastrigin",
-       x = "Métodos",
-       y = "Ineficiencia") +
-  theme_minimal() +
-  theme(legend.position = "none")
+results <- run_simulation(100, rastrigin)
+barplot_simuluation(results, "Métrica de ineficiencia - Rastrigin")
 ```
 
 ### Rosenbrock {#simulación-rosenbrock}
 
-```{r simulation_rosenbrock}
-# Listas para los datos
-ga_error <- vector("list", 100)
-ga_iter <- vector("list", 100)
-ga_eval <- vector("list", 100)
-
-pso_error <- vector("list", 100)
-pso_iter <- vector("list", 100)
-pso_eval <- vector("list", 100)
-
-de_error <- vector("list", 100)
-de_iter <- vector("list", 100)
-de_eval <- vector("list", 100)
-
-# Simulación con 100 semillas diferentes
-for (i in 1:n_runs) {
-  # GA
-  set.seed(i)
-  ga_i <- ga(
-    type = "real-valued",
-    fitness = function(x){return(-rosenbrock(x))},
-    lower = rep(-5.12, 3),
-    upper = rep(5.12, 3),
-    popSize = 50,
-    maxiter = 100,
-    monitor = FALSE
-  )
-  ga_error[[i]] <- abs(ga_i@fitnessValue)
-  ga_iter[[i]] <- ga_i@iter
-  # No hay método directo, toca calcularlo así
-  ga_eval[[i]] <- ga_i@popSize * ga_i@iter
-  
-  # PSO
-  set.seed(i)
-  pso_i <- psoptim(
-    par = rep(NA, 3),
-    fn = rosenbrock,
-    control = list(maxit = 100, s = 50),
-    lower = rep(-5.12, 3), upper = rep(5.12, 3)
-  )
-  pso_error[[i]] <- abs(pso_i$value)
-  pso_iter[[i]] <- pso_i$counts["iteration"]
-  pso_eval[[i]] <- pso_i$counts["function"]
-  
-  # DE
-  set.seed(i)
-  de_i <- DEoptim(
-    fn      = rosenbrock,
-    lower   = rep(-5.12, 3), upper = rep(5.12, 3),
-    control = ctrl
-  )
-  de_error[[i]] <- abs(de_i$optim$bestval)
-  de_iter[[i]] <- de_i$optim$iter
-  de_eval[[i]] <- de_i$optim$nfeval
-}
-
-# Calculamos la métrica
-metric_ga = prod(sapply(list(ga_error, ga_iter, ga_eval), function(x) mean(unlist(x))))
-metric_pso = prod(sapply(list(pso_error, pso_iter, pso_eval), function(x) mean(unlist(x))))
-metric_de = prod(sapply(list(de_error, de_iter, de_eval), function(x) mean(unlist(x))))
-```
-
-Veamos gráficamente los resultados de la iteración con Rosenbrock.
-
-```{r barplot_rosenbrock, fig.align='center', fig.cap="***Fig.22** Comparación Rosenbrock*"}
-# Creamos un data frame
-datos <- data.frame(
-  categoria = c("GA", "PSO", "DE"),
-  valor = round(log(c(metric_ga, metric_pso, metric_de),3))
-)
-
-colors <- c("GA" = "#A9DFBF", "PSO" = "#AED6F1", "DE" = "#FFD7B5")
-
-# Gráfico de barras
-ggplot(datos, aes(x = categoria, y = valor, fill = categoria)) +
-  geom_bar(stat = "identity") +
-  geom_text(aes(label = valor), vjust = -0.5) +
-  scale_fill_manual(values = colors) +
-  labs(title = "Métrica de ineficiencia - Rosenbrock (Logarítmica)",
-       x = "Métodos",
-       y = "Ineficiencia") +
-  theme_minimal() +
-  theme(legend.position = "none")
+Ahora lo mismo, pero para la función de Rosenbrock descrita en la ecuación (2):
+```{r simulation_rosenbrock, fig.align='center', fig.cap="***Fig.22** Comparación Rosenbrock*"}
+results <- run_simulation(100, rosenbrock)
+barplot_simuluation(results, "Métrica de ineficiencia - Rosenbrock (Logarítmica)", exp = TRUE)
 ```
 
 Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya que la métrica de ineficiencia de algoritmos evolutivos **GA** era mucho mayor a las demás.
 
 <br>
-
 ### Discusión {#discusión}
 
 Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales, ejecuciones oficiales en el documento, como los análisis a partir de los GIF; todo esto en complemento con la teoría conocida del curso y las discuiones de clase, se puede concluir lo siguiente:
@@ -1565,10 +1514,10 @@ El problema se modela como una instancia del Problema del Viajante de Comercio (
 -   **Costo del salario** : Se tomó como referencia el salario mínimo mensual legal vigente (SMMLV) en Colombia al momento del estudio, fijado en \$1,423,500 COP (fuente: Ministerio de Trabajo). Haciendo cálculos simples llegamos a que la hora ordinaria en Colombia se da por la siguiente fórmula:
 
     $$
-    \text{Valor hora ordinaria} = \frac{\text{salario mensual}}{\left(\frac{\text{horas semanales}}{6} \times 30\right)}
+    \text{Valor hora ordinaria} = \frac{\text{salario mensual}}{\left(\frac{\text{horas semanales}}{6} \times 30\right)} \qquad (4)
     $$
 
-    Las horas semanales en Colombia a fecha de la realización de este trabajo es de 46, reemplazando en la ecuación:
+    Las horas semanales en Colombia a fecha de la realización de este trabajo es de 46, reemplazando en la ecuación (4):
 
     $$
     \text{Valor hora ordinaria} = \frac{$1.423.500}{\left(\frac{46}{6} \times 30\right)}
@@ -1578,9 +1527,11 @@ El problema se modela como una instancia del Problema del Viajante de Comercio (
 
     Adicionalmente necesitamos el tiempo de conducción entre ciudades para poder calcular el costo del salario. Para esto, se consultaron en [Google Maps Distance Matrix API](https://developers.google.com/maps/documentation/distance-matrix){target="_blank"} utilizando el modo *driving*.
 
-    El costo del salario se calcula con la siguiente ecuación (1):
+    El costo del salario se calcula con la siguiente ecuación (5):
 
-    $\text{Costo_salario} = \text{tiempo} \times \text{costo_hora} \tag{1}$
+    $$
+    \text{Costo_salario} = \text{tiempo} \times \text{costo_hora} \qquad (5)
+    $$
 
 -   **Costo del combustible** . Se utilizó un precio promedio del galón de gasolina, obtenido a partir de los precios reportados por la Comisión de Regulación de Energía y Gas (CREG) para las 13 ciudades principales en la fecha del análisis, resultando en \$15,827 COP/galón.
 
@@ -1588,25 +1539,27 @@ El problema se modela como una instancia del Problema del Viajante de Comercio (
 
     Además necesitamos la distancia entre las ciudades, la cual fue obtenida de la misma API de Google Maps. La distancia entre las ciudades se obtiene en kilómetros y se usa para calcular el costo del combustible.
 
-    El costo del combustible se calcula con la siguiente ecuación (2):
+    El costo del combustible se calcula con la siguiente ecuación (6):
 
     $$
-    \text{Costo_gasolina} = \left( \frac{\text{Distancia}}{\text{Rendimiento (km/galon)}} \right) \times \text{Precio_por_galon} \tag{2}
+    \text{Costo_gasolina} = \left( \frac{\text{Distancia}}{\text{Rendimiento (km/galon)}} \right) \times \text{Precio_por_galon} \qquad (6)
     $$
 
-    Observación: Se uso el galon como unidad de medida ya que en Colombia es el estandar para medir la gasolina.
+    Observación: Se uso el galón como unidad de medida ya que en Colombia es el estándar para medir la gasolina.
 
 -   **Costo de peajes**. La información sobre los costos de peajes para las rutas que conectan las 13 ciudades se obtuvo de la plataforma Tollguru (Se consideraron los peajes de las rutas más comunes).
 
-    El costo de los peajes se calcula con la siguiente ecuación (3):
+    El costo de los peajes se calcula con la siguiente ecuación (7):
 
     $$
-    \text{Costo_peaje} = \text{peaje} \tag{3}
+    \text{Costo_peaje} = \text{peaje} \qquad (7)
     $$
 
-La suma de todos estos costos nos da el costo total de desplazamiento entre dos ciudades, que se calcula con la siguiente ecuación (4): $$
-\text{Costo_total} = \text{Costo_salario} + \text{Costo_gasolina} + \text{Costo_peaje} \tag{4}
-$$ Este problema se modela como un **Problema del Viajante de Comercio** (TSP, por sus siglas en inglés), en el cual buscamos la ruta más corta o económica para visitar todas las ciudades.
+La suma de todos estos costos nos da el costo total de desplazamiento entre dos ciudades, que se calcula con la siguiente ecuación (8):
+$$
+\text{Costo_total} = \text{Costo_salario} + \text{Costo_gasolina} + \text{Costo_peaje} \qquad (8)
+$$
+Este problema se modela como un **Problema del Viajante de Comercio** (TSP, por sus siglas en inglés), en el cual buscamos la ruta más corta o económica para visitar todas las ciudades.
 
 ## Algoritmos utilizados {#algoritmos-utilizados}
 
@@ -1618,9 +1571,7 @@ En este caso, se usan dos algoritmos de optimización para encontrar la mejor ru
 
 ### Código en R para la optimización
 
-Cargamos las librerias necesarias:
-
-```{r}
+```{r part2_import, message = FALSE, include = FALSE}
 library(stats)
 library(ggplot2)
 library(dplyr)
@@ -1726,7 +1677,7 @@ ciudades_nombres <- c("Bogota", "Cali", "Medellin", "Barranquilla", "Cartagena",
 n_ciudades <- length(ciudades_nombres)
 ```
 
-Agregamos datos necesarios para graficar la ruta:
+Agregamos datos de longitud y latitud consultados, y que son necesarios para graficar la ruta:
 
 ```{r}
 coords <- data.frame(
@@ -1758,7 +1709,7 @@ Ahora calculamos el costo total de desplazamiento entre las ciudades:
 ```{r}
 df_costo_total <- df_costo_gasolina + df_costo_salario + df_peajes
 df_costo_total
-#exportar dtf_costo_total a csv, verificando que no exista el archivo
+# Exportar dtf_costo_total a csv, verificando que no exista el archivo
 if (file.exists("df_costo_total.csv")) {
   file.remove("df_costo_total.csv")
   write.csv(df_costo_total, "df_costo_total.csv")
