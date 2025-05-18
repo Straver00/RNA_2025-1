@@ -50,7 +50,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Tabla de contenidos
 
-1.  [Parte 1: Optimización Numérica](#parte-1-optimización-numérica)
+1.  [Introducción](#introducción)
+2.  [Parte 1: Optimización Numérica](#parte-1-optimización-numérica)
     -   [Funciones de prueba](#funciones-de-prueba)
     -   [Optimización en dos y tres dimensiones](#optimización-en-dos-y-tres-dimensiones)
         - [Descenso por gradiente](#descenso-gradiente)
@@ -66,12 +67,27 @@ knitr::opts_chunk$set(echo = TRUE)
         - [Rastrigin](#simulación-rastrigin)
         - [Rosenbrock](#simulación-rosenbrock)
         - [Discusión](#discusión)
-2.  [Parte 2: Optimización Combinatoria](#parte-2-optimización-combinatoria)
+3.  [Parte 2: Optimización Combinatoria](#parte-2-optimización-combinatoria)
     -   [Descripción del problema del vendedor](#descripción-del-problema-del-vendedor)
     -   [Algoritmos utilizados](#algoritmos-utilizados)
-3.  [Bibliografía](#bibliografía)
-4.  [Reporte de Contribución Individual](#reporte-de-contribución-individual)
+4.  [Bibliografía](#bibliografía)
+5.  [Reporte de Contribución Individual](#reporte-de-contribución-individual)
 
+------------------------------------------------------------------------
+
+
+# Introducción {#introducción}
+
+A lo largo del camino de desarrollo e innovación tecnológica con base fundamental en las matemáticas, los problemas asociados a optimización han sido muy comunes, esto entendiendo que la humanidad siempre ha buscado la mejor solución posible, gastando la menor cantidad de recursos, ya que esto es importante para sostenibilidad y el progreso. Es en este contexto que se han desarrollado múltiples técnicas y algoritmos para optimizar procesos, los cuales por su naturaleza, no funcionan todos de igual forma en contextos diferentes, por ello es necesario poner a prueba esta clase de métodos de optimización.
+
+Por ello este trabajo se centra en estudiar, analizar y comparar algoritmos diferentes, específicamente, uno clásico y famoso usado en múltiples situaciones con una base analítica, tal y como lo es el descenso por gradiente con condición inicial aleatoria; también otros de ingenio heurístico con inspiración en procesos observados en la naturaleza, tales como los algoritmos genéticos (evolutivos), los enjambres de partículas, la evolución diferencial y las colonias de hormigas. Para dicho fin, este trabajo se ha centrado en 2 ejes:
+
+- La optimización numérica alrededor del estudio y comparativa con funciones benchmark típicas, siendo un caso muy teórico.
+- La optimización combinatoria, a partir de un problema clásico de la vida real, como es el problema del vendedor viajero, en un escenario particular como lo es la geografía colombiana.
+
+El objetivo será entonces por medio de estos ejes principales, comprender la importancia, aplicabilidad y ventajas de estos algoritmos, entendiendo que son una base fundamental para las grandes tecnologías de hoy.
+
+------------------------------------------------------------------------
 
 # Parte 1: Optimización Numérica {#parte-1-optimización-numérica}
 
@@ -1470,6 +1486,7 @@ barplot_simuluation(results, "Métrica de ineficiencia - Rosenbrock (Logarítmic
 Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya que la métrica de ineficiencia de algoritmos evolutivos **GA** era mucho mayor a las demás.
 
 <br>
+
 ### Discusión {#discusión}
 
 Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales, ejecuciones oficiales en el documento, como los análisis a partir de los GIF; todo esto en complemento con la teoría conocida del curso y las discuiones de clase, se puede concluir lo siguiente:
@@ -1555,7 +1572,7 @@ El problema se modela como una instancia del Problema del Viajante de Comercio (
     \text{Costo_peaje} = \text{peaje} \qquad (7)
     $$
 
-La suma de todos estos costos nos da el costo total de desplazamiento entre dos ciudades, que se calcula con la siguiente ecuación (8):
+La suma de todos estos costos con las ecuaciones (5), (6) y (7), nos da el costo total de desplazamiento entre dos ciudades, que se calcula con la siguiente ecuación (8):
 $$
 \text{Costo_total} = \text{Costo_salario} + \text{Costo_gasolina} + \text{Costo_peaje} \qquad (8)
 $$
@@ -1677,7 +1694,7 @@ ciudades_nombres <- c("Bogota", "Cali", "Medellin", "Barranquilla", "Cartagena",
 n_ciudades <- length(ciudades_nombres)
 ```
 
-Agregamos datos de longitud y latitud consultados, y que son necesarios para graficar la ruta:
+Agregamos datos de longitud y latitud consultados, que son necesarios para graficar la ruta:
 
 ```{r}
 coords <- data.frame(
