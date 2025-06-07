@@ -1494,18 +1494,18 @@ Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya
 
 ### Discusión {#discusión}
 
-Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales, ejecuciones oficiales en el reporte técnico, y los análisis a partir de los GIF, en complemento con la teoría conocida del curso y las discuciones de clase, se puede concluir lo siguiente:
+Tras las ejecuciones realizadas en materia de experimentaciones iniciales, ejecuciones oficiales en el reporte técnico, los análisis a partir de los GIF en complemento con la teoría conocida del curso y las discuciones de clase, se puede concluir lo siguiente:
 
   
-  - El método de optimización por descenso de gradiente es muy **dependiente de sus hiperparámetros y de la topografía del cuerpo matemático** a optimizar, siendo los argumentos más relevantes:
+  - El método de optimización por descenso de gradiente es muy **dependiente de sus hiperparámetros y de la topografía del cuerpo matemático (función)** a optimizar, siendo los argumentos más relevantes:
   
     - **Punto inicial**: Es clave, pues un punto inicial muy bueno o conveniente puede significar la convergencia al óptimo global y un menor costo computacional por iteraciones.
     
-    - **Learning Rate**: Según la naturaleza del problema, puede implicar alejarse del óptimo global buscado y dificultar su convergencia debido a “movimientos bruscos” en el espacio de búsqueda. También puede implicar un descenso demasiado lento, lo cual conlleva más iteraciones y un alto riesgo de estancarse en un óptimo local.
+    - **Learning Rate**: Según la naturaleza del problema, puede implicar alejarse del óptimo global buscado, y dificultar su convergencia debido a “movimientos bruscos” en el espacio de búsqueda. También puede implicar un descenso demasiado lento, lo cual conlleva más iteraciones y un alto riesgo de estancarse en un óptimo local.
 
   - El punto inicial en el descenso por gradiente puede tener dos facetas. En ejercicios didácticos o de revisión, elegir un punto conveniente puede percibirse como hacer trampa. En cambio, en ejercicios complejos con fines de investigación, puede basarse en un conocimiento profundo sobre la naturaleza del problema, permitiendo seleccionar un punto inicial con criterios robustos.
   
-  - Los métodos heurísticos empleados se basan en **ideas bioinspiradas poderosas**. Esto se entiende al considerar que la naturaleza, con el paso del tiempo, ha llevado a los seres vivos a optimizar sus procesos con fines de supervivencia y reproducción. En ese sentido, los algoritmos de este tipo tienen una base sólida respaldada por la propia naturaleza, a pesar de las simplificaciones presentes en algunas de sus implementaciones.
+  - Los métodos heurísticos empleados se basan en **poderosas ideas bioinspiradas**. Esto se entiende al considerar que la naturaleza, con el paso del tiempo, ha llevado a los seres vivos a optimizar sus procesos con fines de supervivencia y reproducción. En ese sentido, los algoritmos de este tipo tienen una base sólida respaldada por la propia naturaleza, a pesar de las simplificaciones presentes en algunas de sus implementaciones.
     
   - Una **diferencia clave** que explica el éxito de los métodos heurísticos por encima del descenso por gradiente es la **implementación de poblaciones**, ya que estas ofrecen diferentes frentes de búsqueda de óptimos, minimizando el riesgo de quedar atrapados en óptimos locales o de requerir iteraciones extensivas. Los miembros de la población se respaldan y guían entre sí.
   
