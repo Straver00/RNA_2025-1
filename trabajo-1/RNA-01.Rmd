@@ -70,8 +70,9 @@ knitr::opts_chunk$set(echo = TRUE)
 3.  [Parte 2: Optimización Combinatoria](#parte-2-optimización-combinatoria)
     -   [Descripción del problema del vendedor](#descripción-del-problema-del-vendedor)
     -   [Algoritmos utilizados](#algoritmos-utilizados)
-4.  [Bibliografía](#bibliografía)
-5.  [Reporte de Contribución Individual](#reporte-de-contribución-individual)
+4.  [Conlusión Final](#conclusión)
+5.  [Bibliografía](#bibliografía)
+6.  [Reporte de Contribución Individual](#reporte-de-contribución-individual)
 
 ------------------------------------------------------------------------
 
@@ -195,7 +196,7 @@ Se seleccionaron las siguientes funciones de prueba para evaluar los diferentes 
   - Rastrigin.
   - Ronsenbrock.
 
-La función de **Rastrigin** se define a continuación con la ecuación (1):
+La función de **Rastrigin** se define a continuación con la ecuación (1) según 'Wikipedia contributors; *Rastrigin function*':
 
 $$
 f(\mathbf{x}) = An + \sum_{i=1}^{n} \left[ x_i^2 - A \cos(2\pi x_i) \right]\, \forall\,\, x_i \in [-5.12,\ 5.12]\qquad (1)
@@ -203,7 +204,7 @@ $$
 
 donde $A=10$ y $x_i \in [-5.12, 5.12]$. Dicha función (1) cuenta con su mínimo global en $X = [0,0,...,0]$ con un valor de $f(\mathbf{x}) = 0$.
 
-Luego, la de **Rosenbrock** se define como describe ahora la ecuación (2):
+Luego, la de **Rosenbrock** se define como describe ahora la ecuación (2), tomada de 'Wikipedia contributors; *Rosenbrock function*':
 
 
 $$
@@ -551,6 +552,8 @@ Los algoritmos evolutivos (AE) son métodos de optimización inspirados en los m
 
 El objetivo es encontrar una solución óptima o cercana al óptimo para un problema, especialmente cuando los métodos tradicionales no son eficaces debido a la complejidad del espacio de búsqueda.
 
+Para la implementación en código R de `GA` se tomó como guía la documentación dispuesta en *'Scrucca, L. (2025). *GA: Genetic Algorithms*. CRAN'*.
+
 #### Rastrigin
 
 Comenzamos con el caso 1D.
@@ -740,6 +743,8 @@ Se basa en las ideas de comportamientos de poblaciones como grupos de aves, que 
 
 Entre muchos otros parámetros adicionales, pero, para este caso particular de comparación de métodos de optimización, solo se modificará el máximo número de iteraciones y población, los demás parámetros se dejarán por defecto.
 
+Para la implementación en código R de `PSO` se tomó como guía la documentación dispuesta en *'Clerc, M., & Coelho, L. S. (2022, Octubre 14). pso: Particle Swarm Optimization (Version 1.0-5) [Manual de referencia]. The R Project for Statistical Computing.'*.
+
 #### Rastrigin
 
 ```{r pso_rastrigin1D}
@@ -879,6 +884,7 @@ La evolución diferencial (*DE*) es un algoritmo evolutivo específico, que se d
 DE es adecuado para problemas con espacios de búsqueda no lineales y multidimensionales, y es menos propenso a quedar atrapado
 en óptimos locales en comparación con otros algoritmos de optimización.
 
+El código en R para está subsección de `DE` se desarrolló según documentación *Mullen, K., Ardia, D., Gil, D., Windover, D., & Cline, J. (2025). DEoptim: Global Optimization by Differential Evolution. CRAN*.
 
 Comenzamos creando un objeto de control del algoritmo, ya que la librería lo requiere de esa forma previamente.
 
@@ -1494,40 +1500,38 @@ Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya
 
 ### Discusión {#discusión}
 
-Tras las ejecuciones realizadas en materia de experimentaciones iniciales, ejecuciones oficiales en el reporte técnico, los análisis a partir de los GIF en complemento con la teoría conocida del curso y las discuciones de clase, se puede concluir lo siguiente:
+Tras las ejecuciones realizadas en materia de experimentaciones iniciales, ejecuciones oficiales en el reporte técnico, los análisis a partir de los GIF en complemento con la teoría conocida del curso y las discusiones de clase, se puede concluir lo siguiente:
 
-  
-  - El método de optimización por descenso de gradiente es muy **dependiente de sus hiperparámetros y de la topografía del cuerpo matemático (función)** a optimizar, siendo los argumentos más relevantes:
-  
-    - **Punto inicial**: Es clave, pues un punto inicial muy bueno o conveniente puede significar la convergencia al óptimo global y un menor costo computacional por iteraciones.
+  - El método de optimización por descenso de gradiente es muy dependiente de sus hiperparámetros y de la topografía del cuerpo matemático (función) a optimizar, siendo los argumentos más relevantes:
+
+    - Punto inicial: Es clave, pues un punto inicial muy bueno o conveniente puede significar la convergencia al óptimo global y un menor costo computacional por iteraciones. Esta dependencia crítica del punto de partida ha sido documentada extensivamente en la literatura de optimización (Auger et al., 2010).
+
+    - Learning Rate: Según la naturaleza del problema, puede implicar alejarse del óptimo global buscado, y dificultar su convergencia debido a "movimientos bruscos" en el espacio de búsqueda. También puede implicar un descenso demasiado lento, lo cual conlleva más iteraciones y un alto riesgo de estancarse en un óptimo local. Korniienko et al. (2024) demuestran cómo la selección inadecuada de la tasa de aprendizaje puede comprometer significativamente el rendimiento del algoritmo en funciones benchmark estándar.
     
-    - **Learning Rate**: Según la naturaleza del problema, puede implicar alejarse del óptimo global buscado, y dificultar su convergencia debido a “movimientos bruscos” en el espacio de búsqueda. También puede implicar un descenso demasiado lento, lo cual conlleva más iteraciones y un alto riesgo de estancarse en un óptimo local.
-
   - El punto inicial en el descenso por gradiente puede tener dos facetas. En ejercicios didácticos o de revisión, elegir un punto conveniente puede percibirse como hacer trampa. En cambio, en ejercicios complejos con fines de investigación, puede basarse en un conocimiento profundo sobre la naturaleza del problema, permitiendo seleccionar un punto inicial con criterios robustos.
   
-  - Los métodos heurísticos empleados se basan en **poderosas ideas bioinspiradas**. Esto se entiende al considerar que la naturaleza, con el paso del tiempo, ha llevado a los seres vivos a optimizar sus procesos con fines de supervivencia y reproducción. En ese sentido, los algoritmos de este tipo tienen una base sólida respaldada por la propia naturaleza, a pesar de las simplificaciones presentes en algunas de sus implementaciones.
-    
-  - Una **diferencia clave** que explica el éxito de los métodos heurísticos por encima del descenso por gradiente es la **implementación de poblaciones**, ya que estas ofrecen diferentes frentes de búsqueda de óptimos, minimizando el riesgo de quedar atrapados en óptimos locales o de requerir iteraciones extensivas. Los miembros de la población se respaldan y guían entre sí.
+  - Una diferencia clave que explica el éxito de los métodos heurísticos por encima del descenso por gradiente es la implementación de poblaciones, ya que estas ofrecen diferentes frentes de búsqueda de óptimos, minimizando el riesgo de quedar atrapados en óptimos locales o de requerir iteraciones extensivas. Los miembros de la población se respaldan y guían entre sí. Esta ventaja poblacional es particularmente evidente en funciones multimodales, como demuestran Auger et al. (2010) en sus comparaciones experimentales de algoritmos libres de derivadas.
+
+  - Los algoritmos bioinspirados demuestran ser una estrategia computacional versátil y potente para abordar problemas de optimización numéricos, especialmente cuando la información del gradiente no está disponible o el espacio de búsqueda exhibe una naturaleza extensa y no lineal que dificulta obtener una expresión analítica. Esta versatilidad ha sido confirmada por estudios comparativos que evalúan múltiples criterios de efectividad (Korniienko et al., 2024); y se evidenciará más adelante en este reporte con la Parte 2, donde aplicaremos uno de estos métodos a un problema de optimización combinatoria del mundo real.
   
-  - Los algoritmos bioinspirados demuestran ser una estrategia computacional versátil y potente para abordar problemas de optimización complejos, **especialmente cuando la información del gradiente no está disponible o el espacio de búsqueda exhibe una naturaleza extensa y no lineal** que dificulta obtener una expresión analítica.
+  - La fortaleza puntual de los algoritmos evolutivos está en la exploración de sus individuos potenciada por la combinación de sus atributos, mediante cruce y la introducción de diversidad a través de mutación. Kozlov et al. (2024) validan esta característica al mostrar el desempeño superior de GA en ciertas funciones benchmark comparadas con los métodos tradicionales.
   
-  - La fortaleza puntual de los algoritmos evolutivos está en la **exploración de sus individuos potenciada por la combinación de sus atributos**, mediante cruce y la introducción de diversidad a través de mutación.
-  
-  - **Equiparar o hacer comparaciones extensas entre los propios métodos heurísticos representa una tarea complicada**, ya que poseen hiperparámetros muy distintos entre sí, los cuales no se pueden igualar de forma simple. Ni siquiera la cantidad de iteraciones máximas puede compararse directamente, dado que una iteración en un algoritmo no tiene el mismo peso o significado que en otro. Además, de la dependencia del estado aleatorio de inicialización de la población en menor medida.
+  - Equiparar o hacer comparaciones extensas entre los propios métodos heurísticos representa una tarea complicada, ya que poseen hiperparámetros muy distintos entre sí, los cuales no se pueden igualar de forma simple. Ni siquiera la cantidad de iteraciones máximas puede compararse directamente, dado que una iteración en un algoritmo no tiene el mismo peso o significado que en otro. Además, de la dependencia del estado aleatorio de inicialización de la población en menor medida. Esta problemática de comparación equitativa ha sido abordada metodológicamente por Auger et al. (2010), quienes proponen marcos de evaluación más robustos para algoritmos de optimización sin derivadas.
   
   - A pesar de la dificultad para equipararlos de forma detallada; con las simulaciones realizadas se pudo evidenciar, bajo algunos casos estándar, ciertas virtudes de unos métodos sobre otros:
   
-    - Por ejemplo, la evolución diferencial logra resultados eficientes con la función de Rosenbrock, pues fue la de menor métrica de ineficiencia, mientras que a los algoritmos evolutivos les costó dramáticamente dicha función.
-    
-    - Por otro lado y para contraste, los algoritmos evolutivos fueron los mejores para Rastrigin, mientras que los enjambres de partículas resultaron ser los más ineficientes para esta función. Esto deja a la evolución diferencial para estas simulaciones estándar, como una opción altamente equilibrada.
-  
-  - Como mostró Korniienko et al. (2024), el mejor enfoque es combinar ambos mundos: usar GD donde la topografía es suave y unimodal, y metaheurísticos cuando se espera alta multimodalidad o cuando no se dispone de derivadas analíticas.
+    - Por ejemplo, la evolución diferencial logra resultados eficientes con la función de Rosenbrock, pues fue la de menor métrica de ineficiencia, mientras que a los algoritmos evolutivos les costó dramáticamente dicha función. Este comportamiento diferencial entre algoritmos según la función objetivo es consistente con los hallazgos de Kozlov et al. (2024), quienes reportan variaciones significativas en el rendimiento relativo de GA, PSO y DE dependiendo de las características específicas de cada función benchmark.
 
+    - Por otro lado y para contraste, los algoritmos evolutivos fueron los mejores para Rastrigin, mientras que los enjambres de partículas resultaron ser los más ineficientes para esta función. Esto deja a la evolución diferencial para estas simulaciones estándar, como una opción altamente equilibrada. La función Rastrigin, conocida por su alta multimodalidad, representa un caso de estudio clásico en la evaluación de algoritmos de optimización global, como se documenta en los estudios comparativos de Auger et al. (2010).
+    
+  - Como mostró Korniienko et al. (2024), el mejor enfoque es combinar ambos mundos: usar descenso de gradiente donde la topografía es suave y unimodal, y metaheurísticos cuando se espera alta multimodalidad o cuando no se dispone de derivadas analíticas. Esta recomendación de enfoque híbrido se basa en criterios múltiples de efectividad que consideran tanto la precisión como la eficiencia computacional de los algoritmos evaluados.
 <br>
 
 ------------------------------------------------------------------------
 
 # Parte 2: Optimización Combinatoria {#parte-2-optimización-combinatoria}
+
+Teniendo ya claras las bondades de los algoritmos heurísticos para problemas de optimización numérica, veamos ahora algo un poco más complejo y de naturaleza diferente, como lo es un problema de optimización combinatoria.
 
 En esta sección, se aborda la optimización del recorrido de un vendedor que debe visitar 13 ciudades principales de Colombia: *Bogotá, Cali, Medellín, Barranquilla, Cartagena, Cúcuta, Bucaramanga, Pereira, Santa Marta, Ibagué, Pasto, Manizales y Neiva*. El objetivo central es determinar la ruta que minimice el costo total del viaje, empleando dos metaheurísticas: Optimización por **Colonias de Hormigas (ACO)** y **Algoritmos Genéticos (GA)**. El costo total considera factores como el salario del conductor durante el viaje, el consumo de combustible, las distancias, tiempos de viaje y peajes.
 
@@ -1587,11 +1591,11 @@ Este problema se modela como un **Problema del Viajante de Comercio** (TSP, por 
 
 ## Algoritmos utilizados {#algoritmos-utilizados}
 
-En este caso, se usan dos algoritmos de optimización para encontrar la mejor ruta:
+En este caso, se usan dos algoritmos de optimización para encontrar la mejor ruta, uno por metahuerística hecho para problemas combinatorios (siendo diferente a los usados en la Parte 1 de este trabajo), y otro que sí es de la Parte 1, para demostrar su flexibilidad y dar algo de continuidad. Así pues, estos algoritmos son:
 
 1\. **Algoritmo de Colonias de Hormigas (ACO)**: Este algoritmo se inspira en el comportamiento colectivo de las hormigas al buscar caminos. Emplea feromonas artificiales para marcar las rutas: las rutas más cortas (de menor costo) acumulan más feromonas, incrementando la probabilidad de que sean elegidas por hormigas futuras, guiando así la búsqueda hacia soluciones prometedoras.
 
-2\. **Algoritmo Genético (GA)**: Basado en los principios de la evolución biológica y la selección natural, este algoritmo opera sobre una población de posibles rutas (cromosomas). Mediante operadores como la selección (favoreciendo las rutas de menor costo), el cruce (combinando partes de rutas existentes para crear nuevas) y la mutación (introduciendo pequeñas alteraciones aleatorias), la población evoluciona a lo largo de generaciones, convergiendo hacia soluciones de alta calidad.
+2\. **Algoritmo Genético (GA)**: Usado y descrito en la anterior sección, está basado en los principios de la evolución biológica y la selección natural, operando en este caso sobre una población de posibles rutas (cromosomas). Mejorando la solución mediante operadores como la selección (favoreciendo las rutas de menor costo), el cruce (combinando partes de rutas existentes para crear nuevas) y la mutación (introduciendo pequeñas alteraciones aleatorias), la población evoluciona a lo largo de generaciones, convergiendo hacia soluciones de alta calidad.
 
 ### Código en R para la optimización
 
@@ -1730,7 +1734,7 @@ df_costo_salario <- df_tiempos_viajes * salario_hora
 
 Ahora calculamos el costo total de desplazamiento entre las ciudades:
 
-```{r}
+```{r, echo = FALSE}
 df_costo_total <- df_costo_gasolina + df_costo_salario + df_peajes
 df_costo_total
 # Exportar dtf_costo_total a csv, verificando que no exista el archivo
@@ -1996,7 +2000,9 @@ resultado_aco <- ant_colony_optimization_r_con_historial(
   Q = 100,
   verbose = TRUE
 )
+```
 
+```{r, echo = FALSE}
 print("--- Resultado Final - Ejecución ACO ---")
 if (!is.null(resultado_aco) && is.finite(resultado_aco$best_tour_cost)) {
     print(paste("Mejor costo encontrado:", format(resultado_aco$best_tour_cost, scientific = FALSE, big.mark=",")))
@@ -2056,9 +2062,9 @@ if (!is.null(resultado_aco) && is.finite(resultado_aco$best_tour_cost)) {
 }
 ```
 
-Para entender mejor cómo el algoritmo refina la solución, generamos una animación que muestra la mejor ruta encontrada hasta cada iteración. Primero, preparamos los datos del historial de rutas, convirtiendo los índices de las rutas en coordenadas geográficas y estructurándolos para `gganimate` .
+Para entender mejor cómo el algoritmo refina la solución, generamos una animación que muestra la mejor ruta encontrada hasta cada iteración. Dicha animación se ilustra con la ***Figura 24*** mostrando la mejor ruta encontrada por ACO en cada iteración, hasta converger a una solución de bajo costo en 100 iteraciones.
 
-```{r}
+```{r, include = FALSE}
 # --- Preparar Datos del Historial para gganimate ---
 # Asume que 'resultado_aco' (con historial), 'coords', y 'n_ciudades' ya existen
 
@@ -2176,15 +2182,13 @@ if(exists("all_segments_history") && nrow(all_segments_history) > 0) {
 }
 ```
 
-La animación resultante (**Figura 24**) ilustra cómo la mejor ruta encontrada por el algoritmo ACO evoluciona a lo largo de las iteraciones, tendiendo a estabilizarse a medida que el algoritmo converge hacia una solución de bajo costo.
-
-```{r}
+```{r, echo = FALSE}
 knitr::include_graphics("proceso_optimizacion_aco_optimizado.gif")
 ```
 
-Continuando con con el **Algoritmo Genético**:
+## Algoritmo de Evolución Genética (GA)
 
-Continuando con las metaheurísticas, ahora abordamos los **Algoritmos Genéticos (AG)**, una clase de algoritmos de optimización inspirados en el proceso de la evolución natural y la genética. Los AG son particularmente efectivos para problemas complejos donde el espacio de búsqueda es grande, como el Problema del Viajante de Comercio.
+Como se demostró en la Parte 1 para funciones numéricas, los Algoritmos Genéticos (AG) son una poderosa herramienta de optimización. Ahora, adaptaremos este mismo enfoque, basado en la evolución de una población de rutas, para abordar el problema combinatorio del viajante de comercio.
 
 El enfoque se basa en mantener y evolucionar una **población** de soluciones candidatas al problema. En nuestro contexto del TSP, cada 'individuo' de la población es una **ruta** o secuencia específica de visita a las ciudades. Cada ruta se representa mediante una codificación, análoga a un **cromosoma** (usualmente, una permutación de los índices o nombres de las ciudades).
 
@@ -2287,9 +2291,9 @@ monitor_ga_history <- function(object, ...) {
     }
   } # Fin if best_indices
 } # Fin monitor_ga_history
+```
 
-
-
+```{r, echo = FALSE}
 # Resetear listas de historial antes de la ejecución
 ga_history_best_tours <- list()
 ga_history_best_costs <- list() 
@@ -2459,7 +2463,7 @@ En la **figura 25** se nota como obtiene mejores resultados en especial en el "B
 
 Creamos la animación para los algortimos geneticos:
 
-```{r}
+```{r, include = FALSE}
 # Solo animar si hay datos y mapa base
 if(exists("all_segments_history_ga") && nrow(all_segments_history_ga) > 0 && exists("colombia")) {
   
@@ -2532,15 +2536,15 @@ if(exists("all_segments_history_ga") && nrow(all_segments_history_ga) > 0 && exi
 } 
 ```
 
-La animación resultante (**Figura 26**) ilustra cómo la mejor ruta encontrada por el algoritmo AG evoluciona a lo largo de las iteraciones, tendiendo a estabilizarse a medida que el algoritmo converge hacia una solución de bajo costo.
-
-```{r}
+```{r, echo = FALSE}
 knitr::include_graphics("proceso_optimizacion_ga.gif")
 ```
 
-Comparando ambos algoritmos:
+La animación resultante (**Figura 26**) ilustra cómo la mejor ruta encontrada por el algoritmo AG evoluciona a lo largo de las iteraciones, tendiendo a estabilizarse a medida que el algoritmo converge hacia una solución de bajo costo.
 
-```{r}
+Ahora, comparando ambos algoritmos:
+
+```{r, echo = FALSE}
 costo_aco <-
   if (!is.null(resultado_aco) && is.finite(resultado_aco$best_tour_cost)) {
     resultado_aco$best_tour_cost
@@ -2599,6 +2603,15 @@ Ese orden evita retornos largos y, al juntar tramos geográficamente cercanos, r
 
 En contraste, el **ACO** depende fuertemente de los parámetros de feromonas (α, β, tasa de evaporación ). Si la evaporación es alta o la influencia heurística (β) es baja, las hormigas pueden dispersarse demasiado y tardar más en reforzar la mejor ruta. Con los valores actuales, el ACO siguió mejorando pero no alcanzó la calidad que el GA obtuvo antes de que se cumpliera su criterio de parada.
 
+
+# Conlusión Final {#conclusión}
+
+Este estudio sobre optimización numérica y combinatoria confirma un principio fundamental: **no existe un algoritmo universalmente superior**, siendo una validación experimental del Non Free Lunch Theorem. Se demostró que la efectividad no reside en un método único, sino en la **selección de la herramienta adecuada** para la naturaleza específica del problema, ya sea la topografía multimodal de una función o la complejidad de un desafío logístico del mundo real.
+
+El análisis comparativo también subrayó **desafíos metodológicos, como la necesidad de múltiples simulaciones para obtener conclusiones fiables ante la variabilidad estocástica de los algoritmos (puntos iniciales, semillas de inicialización)**. Finalmente, se reafirma que la optimización es un pilar en incontables dominios modernos, desde la ingeniería y las finanzas hasta el corazón del aprendizaje automático que mejora optimizando parámetros y funciones de pérdida.
+
+Así, **el estudio de los algoritmos bioinspirados nos enseña a ver la optimización como un conjunto de estrategias diversas**, recordándonos que las soluciones más eficientes a menudo provienen de abstraer los principios de un sistema que ha estado en constante perfeccionamiento durante millones de años: la propia naturaleza.
+
 # Bibliografía {#bibliografía}
 
 - Wikipedia contributors. (2023, Diciembre 12). *Rastrigin function*. Wikipedia. <https://en.wikipedia.org/wiki/Rastrigin_function>
@@ -2611,6 +2624,12 @@ En contraste, el **ACO** depende fuertemente de los parámetros de feromonas (α
 
 - Mullen, K., Ardia, D., Gil, D., Windover, D., & Cline, J. (2025). *DEoptim: Global Optimization by Differential Evolution*. CRAN. <https://cran.r-project.org/web/packages/DEoptim/DEoptim.pdf>
 
+- Auger, A., Hansen, N., Pérez Zerpa, J. M., Ros, R., & Schoenauer, M. (2010). *Experimental Comparisons of Derivative Free Optimization Algorithms*.
+
+- Ivan Korniienko, et al. (2024). *Multi-Criteria Method for Comparing the Effectiveness of Gradient Descent and Heuristic Algorithms on Benchmark Functions*.
+
+- Kozlov, V., et al. (2024). *A Collection of 30 Multidimensional Functions for Global Optimization: Benchmarking GA, PSO and SQP*.
+
 - La información sobre las distancias viales entre ciudades y tiempos de conducción fue obtenida de: Google LLC. (2025). *Distance Matrix API*. Google Maps Platform. <https://developers.google.com/maps/documentation/distance-matrix>
 
 - Información sobre el salario mínimo: Ministerio de Trabajo. (2025). *Presidente decreto salario mínimo para 2025 quedó en 1.623.500, incluido auxilio de transporte*. Recuperado el 25 de abril de 2025, de <https://www.mintrabajo.gov.co/presidente-decreto-salario-minimo-para-2025-quedo-en-1.623.500-incluido-auxilio-de-transporte>
@@ -2622,12 +2641,6 @@ En contraste, el **ACO** depende fuertemente de los parámetros de feromonas (α
 - Wikipedia. (s.f.). *Algoritmo de la colonia de hormigas*. *Wikipedia, La enciclopedia libre*. Recuperado el 28 de abril de 2025, de <https://es.wikipedia.org/wiki/Algoritmo_de_la_colonia_de_hormigas>
 
 - Wikipedia. (s.f.). *Algoritmo genético*. *Wikipedia, La enciclopedia libre*. Recuperado el 28 de abril de 2025, de <https://es.wikipedia.org/wiki/Algoritmo_gen%C3%A9tico>
-
-- Auger, A., Hansen, N., Pérez Zerpa, J. M., Ros, R., & Schoenauer, M. (2010). Experimental Comparisons of Derivative Free Optimization Algorithms.
-
-- Ivan Korniienko, et al. (2024). Multi-Criteria Method for Comparing the Effectiveness of Gradient Descent and Heuristic Algorithms on Benchmark Functions.
-
-- Kozlov, V., et al. (2024). A Collection of 30 Multidimensional Functions for Global Optimization: Benchmarking GA, PSO and SQP.
 
 # Reporte de Contribución Individual {#reporte-de-contribución-individual}
 
@@ -2643,4 +2656,4 @@ En contraste, el **ACO** depende fuertemente de los parámetros de feromonas (α
 **Mateo Sebastián Mora Montero**: Implementación manual y personalizada del algoritmo de descenso por gradiente, añadiendo los atributos y métodos para el monitoreo, definición de funciones especifícas en código para los gradientes de las funciones. Revisión ortográfica y gramática del trabajo en general.
 
 
-**Stiven Julio Doval:** Implementación de optimización por evolución diferencial con la función `DEoptim` de la librería de mismo nombre, incluyendo creación del objeto de control y algoritmo de monitoreo para la recolección de información para el GIF. Revisión ortográfica y de rotulación de elementos visuales.
+**Stiven Julio Doval:** Implementación de optimización por evolución diferencial con la función `DEoptim` de la librería de mismo nombre, incluyendo creación del objeto de control y algoritmo de monitoreo para la recolección de información para el GIF. Revisión ortográfica y de rotulación de elementos visuales. Adición de bibliografía basada en papers científicos.

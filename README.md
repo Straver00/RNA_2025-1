@@ -4,8 +4,8 @@ en el semestre 2025-1S, para los diferentes 4 trabajos del curso. Los cuáles co
 
 ## Trabajo 1: Optimización heurística
 
-Entendiendo lo importante que es la optimización para las redes neuronales, el primer trabajo se centra en el estudio de métodos optimización clásicos como
-el descenso por gradientes, y los algoritmos bioinspirados. Para esto se estudia tanto optimización numérica como combinatoria, estudiando casos teóricos y
+Entendiendo lo importante que es la optimización para diversos procesos modernos y tecnologías como las redes neuronales; el primer trabajo se centra en el estudio de métodos optimización clásicos como
+el descenso por gradientes, y los algoritmos bioinspirados (GA, PSO, DE, ACO). Para esto se estudia tanto optimización numérica como combinatoria, estudiando casos teóricos y
 reales aplicados.
 
   - Lenguaje empleado: R
