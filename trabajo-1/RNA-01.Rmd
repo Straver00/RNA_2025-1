@@ -1520,6 +1520,8 @@ Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales,
     - Por ejemplo, la evolución diferencial logra resultados eficientes con la función de Rosenbrock, pues fue la de menor métrica de ineficiencia, mientras que a los algoritmos evolutivos les costó dramáticamente dicha función.
     
     - Por otro lado y para contraste, los algoritmos evolutivos fueron los mejores para Rastrigin, mientras que los enjambres de partículas resultaron ser los más ineficientes para esta función. Esto deja a la evolución diferencial para estas simulaciones estándar, como una opción altamente equilibrada.
+  
+  - Como mostró Korniienko et al. (2024), el mejor enfoque es combinar ambos mundos: usar GD donde la topografía es suave y unimodal, y metaheurísticos cuando se espera alta multimodalidad o cuando no se dispone de derivadas analíticas.
 
 <br>
 
@@ -2620,6 +2622,12 @@ En contraste, el **ACO** depende fuertemente de los parámetros de feromonas (α
 - Wikipedia. (s.f.). *Algoritmo de la colonia de hormigas*. *Wikipedia, La enciclopedia libre*. Recuperado el 28 de abril de 2025, de <https://es.wikipedia.org/wiki/Algoritmo_de_la_colonia_de_hormigas>
 
 - Wikipedia. (s.f.). *Algoritmo genético*. *Wikipedia, La enciclopedia libre*. Recuperado el 28 de abril de 2025, de <https://es.wikipedia.org/wiki/Algoritmo_gen%C3%A9tico>
+
+- Auger, A., Hansen, N., Pérez Zerpa, J. M., Ros, R., & Schoenauer, M. (2010). Experimental Comparisons of Derivative Free Optimization Algorithms.
+
+- Ivan Korniienko, et al. (2024). Multi-Criteria Method for Comparing the Effectiveness of Gradient Descent and Heuristic Algorithms on Benchmark Functions.
+
+- Kozlov, V., et al. (2024). A Collection of 30 Multidimensional Functions for Global Optimization: Benchmarking GA, PSO and SQP.
 
 # Reporte de Contribución Individual {#reporte-de-contribución-individual}
 
