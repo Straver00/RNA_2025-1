@@ -212,8 +212,7 @@ f(\mathbf{x}) = \sum_{i=1}^{n-1} \left[ 100(x_{i+1} - x_i^2)^2 + (1 - x_i)^2  \r
 $$
 Y esta función (2) cuenta con su mínimo global en $X = [1,1,...,1]$ con un valor de $f(\mathbf{x}) = 0$.
 
-Procedemos ahora a declarar las funciones vectorizadas en R.
-```{r functions_to_optimize}
+```{r functions_to_optimize, echo = FALSE}
 # Función de Rastrigin con entrada como vector
 rastrigin <- function(x) {
   A <- 10
@@ -233,9 +232,9 @@ rosenbrock_2d <- function(x) {
 }
 ```
 
-La función de Rastrigin tiene un dominio limitado, mientras la de Rosenbrock tiene como dominio los reales, sin embargo, ambas las vamos a trabajar en el espacio de búsqueda de Rastrigin, entendiendo que ambos mínimos globales están en dicho espacio, y ampliarlo es incrementar el costo computacional innecesariamente sin motivo alguno para el ejercicio de examinar los métodos de optimización.
+Ahora bien, la función de Rastrigin tiene un dominio limitado, mientras la de Rosenbrock tiene como dominio los reales, sin embargo, ambas las vamos a trabajar en el espacio de búsqueda de Rastrigin, entendiendo que ambos mínimos globales están en dicho espacio, y ampliarlo es incrementar el costo computacional innecesariamente sin motivo alguno para el ejercicio de examinar los métodos de optimización.
 
-```{r def_ranges}
+```{r def_ranges, echo = FALSE}
 # Definimos el espacio de búsqueda
 x <- seq(-5.12, 5.12, length.out = 200)
 y <- seq(-5.12, 5.12, length.out = 200)
@@ -339,9 +338,7 @@ En esta parte se realizará la optimización de las anteriores funciones en dos 
 
 En este caso debido a la complejidad de las funciones de prueba se realizaron algunas modificaciones al método simple, por ejemplo; si la distancia entre el punto y la actualización crece demasiado o el método no converge con cierto número de iteraciones, se reinicia el algoritmo con un nuevo punto aleatorio o el mejor punto encontrado hasta el momento, respectivamente. Esto hace que el método sea menos propenso a quedarse en mínimos locales y tenga más chances de llegar hasta el mínimo global.
 
-Creamos entonces, la función para el decenso por gradiente.
-
-```{r def_gradient_descent}
+```{r def_gradient_descent, echo = FALSE}
 gradient_descent_mod <- function(f, grad_f, x0, eta = 0.001, tol = 1e-7, max_iter = 100000,
                                  max_restarts = 5, patience = 5000) {
   restart_count <- 0
@@ -425,9 +422,7 @@ gradient_descent_mod <- function(f, grad_f, x0, eta = 0.001, tol = 1e-7, max_ite
 
 #### Rastrigin
 
-Antes de proceder es importante definir la función gradiente de Rastrigin.
-
-```{r grad_rastrigin}
+```{r grad_rastrigin, echo = FALSE}
 grad_rastrigin <- function(x) {
   A <- 10
   n <- length(x)
@@ -441,7 +436,7 @@ grad_rastrigin <- function(x) {
 
 Comenzamos con la solución para 2 dimensiones base, o sea *f(x,y)*:
 
-```{r gd_rastrigin2D}
+```{r gd_rastrigin2D, echo = FALSE}
 # Punto inicial aleatorio
 set.seed(2)
 vec <- runif(2, min = -5.12, max = 5.12)
@@ -482,9 +477,7 @@ Ese valor óptimo hallado en 3D, si analizamos las coordenadas (x, y, z) vemos q
 
 #### Rosenbrock
 
-Nuevamente, antes de proceder con su optimización, formulamos la función gradiente de Rosenbrock.
-
-```{r grad_rosenbrock2D}
+```{r grad_rosenbrock2D, echo = FALSE}
 # Gradiente de la función de Rosenbrock en 2D
 grad_rosenbrock2D <- function(x) {
   dx <- -400 * x[1] * (x[2] - x[1]^2) - 2 * (1 - x[1])
@@ -557,7 +550,7 @@ Para la implementación en código R de `GA` se tomó como guía la documentaci�
 #### Rastrigin
 
 Comenzamos con el caso 1D.
-```{r ga_rastrigin1D}
+```{r ga_rastrigin1D, echo = FALSE}
 genetic_rastri <- ga(
   type = "real-valued",
   fitness = function(x){return(-rastrigin(x))},
@@ -747,7 +740,7 @@ Para la implementación en código R de `PSO` se tomó como guía la documentaci
 
 #### Rastrigin
 
-```{r pso_rastrigin1D}
+```{r pso_rastrigin1D, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
 ras_optim = psoptim(par = rep(NA, 2), fn = rastrigin,
@@ -886,9 +879,7 @@ en óptimos locales en comparación con otros algoritmos de optimización.
 
 El código en R para está subsección de `DE` se desarrolló según documentación *Mullen, K., Ardia, D., Gil, D., Windover, D., & Cline, J. (2025). DEoptim: Global Optimization by Differential Evolution. CRAN*.
 
-Comenzamos creando un objeto de control del algoritmo, ya que la librería lo requiere de esa forma previamente.
-
-```{r control_de}
+```{r control_de, echo = FALSE}
 # Creamos el objeto de control necesario para la función DEoptim
 ctrl <- DEoptim.control(
   NP      = 50,    # tamaño de población
@@ -902,7 +893,7 @@ ctrl <- DEoptim.control(
 #### Rastrigin
 
 Iniciamos esta sub-sección con Rastrigin 1D.
-```{r de_rastrigin1D}
+```{r de_rastrigin1D, echo = FALSE}
 set.seed(2)
 de_rastri <- DEoptim(
   fn      = rastrigin,
@@ -1040,7 +1031,6 @@ Usando {de_rosen$optim$iter} iteraciones."))
 ```
 
 A términos generales, la evolución diferencial le va especialmente bien con la función de Rosenbrock
-
 <br>
 
 ## Generación de los GIF {#representación-gráfica-del-proceso-de-optimizacion}
@@ -1474,7 +1464,7 @@ barplot_simuluation <- function(results, str_title, exp = FALSE){
 ### Rastrigin {#simulación-rastrigin}
 
 Ejecutemos la simulación para la función de Rastrigin dada por la ecuación (1) y veamos los resultados:
-```{r simulation_rastrigin, fig.align='center', fig.cap="***Fig.21** Comparación Rastrigin*"}
+```{r simulation_rastrigin, fig.align='center', fig.cap="***Fig.21** Comparación Rastrigin*", echo = FALSE}
 # Estructura de control para evolución diferencial
 ctrl <- DEoptim.control(
   NP      = 50,
@@ -1489,13 +1479,12 @@ barplot_simuluation(results, "Métrica de ineficiencia - Rastrigin")
 ### Rosenbrock {#simulación-rosenbrock}
 
 Ahora lo mismo, pero para la función de Rosenbrock descrita en la ecuación (2):
-```{r simulation_rosenbrock, fig.align='center', fig.cap="***Fig.22** Comparación Rosenbrock*"}
+```{r simulation_rosenbrock, fig.align='center', fig.cap="***Fig.22** Comparación Rosenbrock*", echo = FALSE}
 results <- run_simulation(100, rosenbrock)
 barplot_simuluation(results, "Métrica de ineficiencia - Rosenbrock (Logarítmica)", exp = TRUE)
 ```
 
 Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya que la métrica de ineficiencia de algoritmos evolutivos **GA** era mucho mayor a las demás.
-
 <br>
 
 ### Discusión {#discusión}
@@ -1619,7 +1608,7 @@ library(dotenv)
 
 Consultamos las distancias viales entre las ciudades y tiempos de viaje ofrecidos por la API de Google. Adicionalmente cargamos los costos de peajes, los nombres de las ciudades y el número de ciudades:
 
-```{r}
+```{r, echo = FALSE}
 # Consultamos las distancias viales y tiempos de viaje
 dotenv::load_dot_env()
 API_KEY <- Sys.getenv("APIKEY_DE_GOOGLE_MAPS")
@@ -1707,7 +1696,7 @@ n_ciudades <- length(ciudades_nombres)
 
 Agregamos datos de longitud y latitud consultados, que son necesarios para graficar la ruta:
 
-```{r}
+```{r, echo = FALSE}
 coords <- data.frame(
   ciudad = ciudades_nombres,
   lon = c(-74.0721, -76.5225, -75.5736, -74.7964, -75.5144, -72.5074, -73.1198, -75.6961, -74.2050, -75.2174, -77.2811, -75.4849, -75.2819),
@@ -1760,9 +1749,9 @@ El algoritmo ACO simula este comportamiento mediante:
 
 **Selección Probabilística:** Las hormigas eligen los siguientes pasos basándose tanto en la intensidad de la feromona como, opcionalmente, en información heurística (e.g., la distancia directa), favoreciendo caminos prometedores pero permitiendo la exploración.
 
-A continuación, se presenta la función `ant_colony_optimization_r_con_historial` desarrollada en R para implementar el algoritmo de optimización por colonia de hormigas. Esta función está diseñada para resolver el Problema del Viajante de Comercio (TSP), buscando la ruta de menor costo total. Además de encontrar la mejor ruta, registra el historial de la mejor solución encontrada en cada iteración, lo cual es útil para analizar la convergencia y visualizar el proceso.
+Se usa la función `ant_colony_optimization_r_con_historial` desarrollada en R para implementar el algoritmo de optimización por colonia de hormigas. Esta función está diseñada para resolver el Problema del Viajante de Comercio (TSP), buscando la ruta de menor costo total. Además de encontrar la mejor ruta, registra el historial de la mejor solución encontrada en cada iteración, lo cual es útil para analizar la convergencia y visualizar el proceso.
 
-```{r}
+```{r, echo = FALSE}
 # --- Función ACO Única (con historial detallado de rutas) ---
 # Nota: Esta función devuelve tanto el resultado final como el historial.
 ant_colony_optimization_r_con_historial <- function(costos, num_ants = 10, num_iterations = 100, alpha = 1.0, beta = 2.0, rho = 0.5, Q = 100, verbose = TRUE) {
@@ -1982,9 +1971,9 @@ ant_colony_optimization_r_con_historial <- function(costos, num_ants = 10, num_i
 
 Ahora, ejecutamos la función `ant_colony_optimization_r_con_historial` con un conjunto de parámetros definidos. Se establece una semilla (`set.seed`) para garantizar la reproducibilidad de los resultados, dado el componente probabilístico del algoritmo.
 
-Adicional, en la **figura 23** se observa como el algoritmo va obtendiendo mejores resultados al optimizar la función.
+Adicional, en la ***Figura 23*** se observa como el algoritmo va obtendiendo mejores resultados al optimizar la función.
 
-```{r}
+```{r, echo = FALSE}
 # Parámetros de ejecución
 num_ants_aco <- 30
 num_iterations_aco <- 100
@@ -2206,9 +2195,9 @@ El algoritmo opera en ciclos llamados **generaciones**. En cada generación, se 
 
 A través de la aplicación repetida de estos operadores genéticos (selección, cruzamiento, mutación) durante muchas generaciones, la población tiende a converger hacia rutas de muy alta calidad (bajo costo).
 
-A continuación, se presenta la función en R que implementa el Algoritmo Genético diseñado para resolver nuestro problema del viajante.
+Se definió una función en R que implementa el Algoritmo Genético diseñado para resolver nuestro problema del viajante.
 
-```{r}
+```{r, echo = FALSE}
 calculate_tour_cost <- function(tour, cost_matrix) {
   total_cost <- 0
   n <- length(tour)
