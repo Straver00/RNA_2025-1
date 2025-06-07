@@ -83,9 +83,9 @@ A lo largo del camino de desarrollo e innovación tecnológica con base fundamen
 Por ello este trabajo se centra en estudiar, analizar y comparar algoritmos diferentes, específicamente, uno clásico y famoso usado en múltiples situaciones con una base analítica, tal y como lo es el descenso por gradiente con condición inicial aleatoria; también otros de ingenio heurístico con inspiración en procesos observados en la naturaleza, tales como los algoritmos genéticos (evolutivos), los enjambres de partículas, la evolución diferencial y las colonias de hormigas. Para dicho fin, este trabajo se ha centrado en 2 ejes:
 
 - La optimización numérica alrededor del estudio y comparativa con funciones benchmark típicas, siendo un caso muy teórico.
-- La optimización combinatoria, a partir de un problema clásico de la vida real, como es el problema del vendedor viajero, en un escenario particular como lo es la geografía colombiana.
+- La optimización combinatoria, a partir de un problema clásico de la vida real, como es el problema del vendedor viajero, en un escenario particular de la geografía colombiana.
 
-El objetivo será entonces por medio de estos ejes principales, comprender la importancia, aplicabilidad y ventajas de estos algoritmos, entendiendo que son una base fundamental para las grandes tecnologías de hoy.
+El objetivo será entonces por medio de estos ejes principales, comprender la importancia, aplicabilidad y ventajas de estos algoritmos, reconociendo su papel fundamental en aplicaciones tecnológicas modernas como la inteligencia artificial, la logística y la ingeniería de sistemas complejos.
 
 ------------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ makeGIF <- function(array_points, x_seq, y_seq, z_eval, num_levels,
 
 ## Funciones de Prueba {#funciones-de-prueba}
 
-Se seleccionaron las siguientes funciones de prueba para evaluar los diferentes algortimos de optimización:
+Se seleccionaron las siguientes funciones de prueba para evaluar los diferentes algoritmos de optimización:
 
   - Rastrigin.
   - Ronsenbrock.
@@ -328,17 +328,17 @@ Con las funciones presentadas y teniendo claro su topografía, además del espac
 
 El descenso de gradiente es un algoritmo de optimización determinista que busca minimizar (o maximizar) una función ajustando iterativamente sus variables en la dirección del gradiente negativo. Es ampliamente utilizado en matemáticas, ingeniería y aprendizaje automático como un **método clásico**. Tiene hiperparámetros como:
 
-  - Punto inicial: Coordenadas desde donde comienza la búsqueda.
-  - Tasa de aprendizaje (learning rate): Determina el tamaño del paso en cada iteración.
-  - Número de iteraciones: Máximo de pasos antes de detenerse.
-  - Criterio de convergencia: Umbral para detenerse si el cambio es muy pequeño.
-  - Gradiente: Derivadas parciales de la función respecto a cada variable.
+  - *Punto inicial*: Coordenadas desde donde comienza la búsqueda.
+  - *Tasa de aprendizaje (learning rate)*: Determina el tamaño del paso en cada iteración.
+  - *Número de iteraciones*: Máximo de pasos antes de detenerse.
+  - *Criterio de convergencia*: Umbral para detenerse si el cambio es muy pequeño.
+  - *Gradiente*: Derivadas parciales de la función respecto a cada variable.
 
 En esta parte se realizará la optimización de las anteriores funciones en dos y tres dimensiones, usando el método de descenso por gradiente, el cual consiste en recorrer la función dando pasos pequeños en la dirección en donde la función decrece más rápido.
 
 En este caso debido a la complejidad de las funciones de prueba se realizaron algunas modificaciones al método simple, por ejemplo; si la distancia entre el punto y la actualización crece demasiado o el método no converge con cierto número de iteraciones, se reinicia el algoritmo con un nuevo punto aleatorio o el mejor punto encontrado hasta el momento, respectivamente. Esto hace que el método sea menos propenso a quedarse en mínimos locales y tenga más chances de llegar hasta el mínimo global.
 
-Creamos entonces, la función para el decenso por gradiente
+Creamos entonces, la función para el decenso por gradiente.
 
 ```{r def_gradient_descent}
 gradient_descent_mod <- function(f, grad_f, x0, eta = 0.001, tol = 1e-7, max_iter = 100000,
@@ -476,7 +476,9 @@ print(glue("\nLa mejor solución hallada está en:
 Con un valor óptimo de {gd_ras$value}"))
 ```
 Ese valor óptimo hallado en 3D, si analizamos las coordenadas (x, y, z) vemos que se aproxima al mínimo global, por lo que en esta ocasión el método lo hizo bien.
+
 <br>
+
 #### Rosenbrock
 
 Nuevamente, antes de proceder con su optimización, formulamos la función gradiente de Rosenbrock.
@@ -675,7 +677,7 @@ points(1, 0, col = "green", pch = 19, lwd = 1)
 ```
 Se obtiene una solución que a términos prácticos es exacta.
 
-Luego, para el caso 2D de Rosenbrock
+Luego, para el caso 2D de Rosenbrock.
 ```{r ga_rosenbrock2D, echo = FALSE}
 genetic_rosen <- ga(
   type = "real-valued",
@@ -730,11 +732,11 @@ Según los resultados númericos, se aproxima bastante bien.
 
 Se basa en las ideas de comportamientos de poblaciones como grupos de aves, que en búsqueda de alimento, no solo se mueven a cierta velocidad, sino que buscan en base a lo que observan del entorno, y lo que observan en sus compañeros. Para aplicar la optimización por enjambre de partículas se empleó la función `psoptim` de la librería `pso` (particle swarm optimization). Esta permite modificar diversos parámetros como por ejemplo:
 
-  - Máximo número de iteraciones.
-  - Tamaño del enjambre.
-  - Magnitud del vector de velocidad.
-  - Constante de exploración local (cognitivo).
-  - Constante de exploración global (social).
+  - *Máximo número de iteraciones*.
+  - *Tamaño del enjambre*.
+  - *Magnitud del vector de velocidad*.
+  - *Constante de exploración local (cognitivo)*.
+  - *Constante de exploración global (social)*.
 
 Entre muchos otros parámetros adicionales, pero, para este caso particular de comparación de métodos de optimización, solo se modificará el máximo número de iteraciones y población, los demás parámetros se dejarán por defecto.
 
@@ -763,6 +765,8 @@ points(0, 0, col = "green", pch = 19, lwd = 1)
 ```
 La solucion númerica se aproxima lo suficientemente bien para ser gráficamente perfecta.
 
+Vemos ahora para el caso 2D a 3D.
+
 ```{r pso_rastrigin2d, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones y 50 miembros
@@ -785,6 +789,7 @@ points(0,0, col = "green", pch = 19, lwd = 1)
 ```
 Continuamos con una solución óptima del método, suficientemente buena gráficamente, con un error despreciable.
 
+Finalizamos Rastrigin con PSO mirando el caso 3D.
 ```{r pso_ras_3d, echo = FALSE}
 set.seed(2)
 # Usamos la función con 100 iteraciones
@@ -866,10 +871,10 @@ Vemos que ya en 3D el método de enjambre de partículas, le cuesta obtener resu
 
 La evolución diferencial (*DE*) es un algoritmo evolutivo específico, que se diferencia por su metodología para generar variación entre individuos por medio de diferencias entre ellos, modulada por un factor de escala *F*, a parte de tener las otras operaciones de los algortimos evolutivos convencionales. Los parámetros principales de este algoritmo incluyen:
 
-  - Tamaño de población.
-  - Factor de escala.
-  - Probabilidad de cruce.
-  - Número de generaciones.
+  - *Tamaño de población*.
+  - *Factor de escala*.
+  - *Probabilidad de cruce*.
+  - *Número de generaciones*.
 
 DE es adecuado para problemas con espacios de búsqueda no lineales y multidimensionales, y es menos propenso a quedar atrapado
 en óptimos locales en comparación con otros algoritmos de optimización.
@@ -1105,7 +1110,7 @@ Recordando que acorde al código, debido a la enorme cantidad de iteraciones del
 
 ### Algoritmos evolutivos {#gif-algoritmos-evolutivos}
 
-Para poder guardar los puntos de cada población en cada iteracioń con la librería `GA` es necesario crear previamente una función de monitoreo, y luego pasarla a los argumentos de la función `ga`.
+Para poder guardar los puntos de cada población en cada iteración con la librería `GA` fue necesario crear previamente una función de monitoreo, y luego pasarla a los argumentos de la función `ga`.
 ```{r gif_ga_ras, warning = FALSE, eval = FALSE, echo = FALSE}
 # Creamos lista global para guardar los puntos por generación
 poblacion_por_gen <- list()
@@ -1273,7 +1278,7 @@ makeGIF(positions, x, y, z_ros, 40, "PSO en Rosenbrock - Iteración",
 
 <br>
 
-Particularmente en la función de Rosenbrock, aunque el método de enjambre va convergiendo, varios miembros se acumulan alrededor del óptimo, por cuestiones de la naturaleza cognitiva de los miemrbos del algoritmo.
+Particularmente en la función de Rosenbrock, aunque el método de enjambre va convergiendo, varios miembros se acumulan alrededor del óptimo, por cuestiones de la naturaleza cognitiva de los miembros del algoritmo.
 
 ### Evolución diferencial {#gif-evolución-diferencial}
 
@@ -1362,7 +1367,7 @@ Para tener una herramienta previa al análisis final, se va establecer una métr
 $$
 \text{Métrica de ineficiencia} = \overline{|{\text{error}}|} \times \overline{\text{iteraciones}} \times \overline{\text{evaluaciones}} \qquad (3)
 $$
-Para esto vamos a correr en un ciclo definido **for**, los 3 métodos heurísticos con **100 semillas diferentes de aleatoriedad**, recopilaremos los resultados, obtendremos el promedio de cada factor, y con ellos calcularemos la métrica. La prueba será con las funciones a 3 variables de entrada, para mayor exigencia, y como parámetros lo estableceremos con 50 miembros de población y 100 iteraciones límite.
+Para esto vamos a correr en un ciclo definido **for**, los 3 métodos heurísticos con **100 semillas diferentes de aleatoriedad**, recopilaremos los resultados, obtendremos el promedio de cada factor, y con ellos calcularemos la métrica. La prueba será con las funciones a 3 variables de entrada, para mayor exigencia; los parámetros estarán establecidos en 50 miembros de población y 100 iteraciones límite.
 
 ```{r simluations_function, include = FALSE}
 run_simulation <- function(number_runs, ref_function){
@@ -1489,7 +1494,7 @@ Fue necesario poner esta gráfica con el logaritmo base euler de los valores, ya
 
 ### Discusión {#discusión}
 
-Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales, ejecuciones oficiales en el documento, como los análisis a partir de los GIF; todo esto en complemento con la teoría conocida del curso y las discuiones de clase, se puede concluir lo siguiente:
+Tras las ejecuciones realizadas tanto en materia de experimentaciones iniciales, ejecuciones oficiales en el reporte técnico, y los análisis a partir de los GIF, en complemento con la teoría conocida del curso y las discuciones de clase, se puede concluir lo siguiente:
 
   
   - El método de optimización por descenso de gradiente es muy **dependiente de sus hiperparámetros y de la topografía del cuerpo matemático** a optimizar, siendo los argumentos más relevantes:

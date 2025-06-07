@@ -8,7 +8,10 @@ Entendiendo lo importante que es la optimización para las redes neuronales, el 
 el descenso por gradientes, y los algoritmos bioinspirados. Para esto se estudia tanto optimización numérica como combinatoria, estudiando casos teóricos y
 reales aplicados.
 
-Lenguaje empleado: R
+    - Lenguaje empleado: R
+    - Archivo con el código fuente: RNA-01.Rmd
+    - Archivo web del blog: RNA-01.html
+    - Los demás archivos son los .csv con los datos del problema del vendedor viajero y los .gif de las animaciones.
 
 ## Trabajo 2: Aplicaciones de redes neuronales a datos tabulares
 
