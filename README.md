@@ -15,6 +15,13 @@ reales aplicados.
 
 ## Trabajo 2: Aplicaciones de redes neuronales a datos tabulares
 
+Uso práctico de redes neuronales con datos tabulares para la estimación de scorecards de crédito. Implementación práctica por medio de una app web con el modelo compilado realizando inferencia.
+
+  - webpage: Carpeta con proyecto de la página web
+  - bestModel.keras: Mejor modelo hallado guardado en formato .keras
+  - datos.csv: Datos procesados utilizados para entrenar y evaluar el modelo
+  - scalerMinMax.pkl: Escalador aplicable a los datos tabulares numéricos
+
 ## Trabajo 3: Aplicaciones en sistemas de recomendación e imágenes
 
 ## Trabajo 3: Aplicaciones de grandes modelos de lenguaje
