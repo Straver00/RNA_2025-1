@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="cards-center">
+  <a class="card-link" href="{{ url_for('demand') }}">
+    <h2>🚌 Predicción de Demanda</h2>
+    <p>Anticipa la demanda futura de tu ruta.</p>
+  </a>
+
+  <a class="card-link" href="{{ url_for('classify') }}">
+    <h2>🚗 Clasificar Conducción</h2>
+    <p>Detecta comportamientos riesgosos en imágenes.</p>
+  </a>
+</section>
+{% endblock %}
