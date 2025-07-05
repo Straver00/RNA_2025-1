@@ -6,13 +6,12 @@ import pandas as pd
 import joblib
 import tensorflow as tf
 from PIL import Image, UnidentifiedImageError
-
-# ─── PyTorch ────────────────────────────────────────────────────────
 import torch
 import torch.nn as nn
 
 # Función de pre-proceso para el clasificador de imágenes
 from inference_model import preprocess_image_for_model
+from tensorflow.keras.models import load_model
 
 # -------------------------------------------------------------------
 # Configuración general
@@ -96,6 +95,82 @@ def predict_demand(raw_form: dict) -> float:
 
 
 # -------------------------------------------------------------------
+# Función de recomendacion
+# -------------------------------------------------------------------
+all_dest_df = pd.read_csv(os.path.join(MODELS_DIR, "Expanded_Destinations.csv"))
+print("Cols disponibles:", list(all_dest_df.columns))
+
+dest_pop = all_dest_df[["Popularity"]].to_numpy(dtype=float)  # (N_dest,1)
+
+dest_type_dummies = pd.get_dummies(
+    all_dest_df["Type"],
+    prefix="Type"
+).astype(float)
+
+dest_time_dummies = pd.get_dummies(
+    all_dest_df["BestTimeToVisit"],
+    prefix="BestTime"
+).astype(float)
+
+dest_features_array = np.hstack([
+    dest_type_dummies.to_numpy(dtype=float),
+    dest_time_dummies.to_numpy(dtype=float)
+])  
+
+N_dest = dest_features_array.shape[0]
+
+reco_model  = load_model(os.path.join(MODELS_DIR,
+                                      "travel_recommendation_model.keras"))
+print("Input shapes:", reco_model.input_shape)
+reco_scaler = joblib.load(os.path.join(MODELS_DIR, "scaler.joblib"))
+reco_mlb    = joblib.load(os.path.join(MODELS_DIR, "mlb.joblib"))
+gender_enc  = joblib.load(os.path.join(MODELS_DIR, "gender_encoder.joblib"))
+
+def recommend_destinations(user, top_k=5):
+    user_vals = np.array([
+        user["NumberOfAdults"],
+        user["NumberOfChildren"]
+    ], dtype=float).reshape(1, -1)                     # (1,2)
+
+    num_tab = np.hstack([
+        np.repeat(user_vals, N_dest, axis=0),         # (N_dest,2)
+        dest_pop                                      # (N_dest,1)
+    ])                                                # → (N_dest,3)
+
+    num_scaled = reco_scaler.transform(num_tab)       # (N_dest,3)
+
+    g_arr = gender_enc.transform([user["Gender"]])    # (1,)
+    g_rep = np.repeat(g_arr.reshape(-1,1), N_dest, axis=0)  # (N_dest,1)
+
+    prefs = [p.strip() for p in user["Preferences"].split(",")]
+    prefs_hot = reco_mlb.transform([prefs])           # (1,M)
+    prefs_rep = np.repeat(prefs_hot, N_dest, axis=0)   # (N_dest,M)
+
+    X_tab = np.hstack([num_scaled, g_rep, prefs_rep, dest_features_array])
+
+    X_dest = all_dest_df[["DestinationID"]].to_numpy(dtype=int)
+
+    scores = reco_model.predict([X_dest, X_tab]).flatten()
+
+    df_scores = pd.DataFrame({
+        "Name":  all_dest_df["Name"],
+        "State": all_dest_df["State"],
+        "Score": scores
+    })
+
+    top_df = (
+        df_scores
+        .sort_values("Score", ascending=False)
+        .drop_duplicates(subset=["Name", "State"])  
+        .head(top_k)
+        .reset_index(drop=True)
+    )
+
+    return top_df[["Name", "State"]]
+
+
+
+# -------------------------------------------------------------------
 # Rutas Flask
 # -------------------------------------------------------------------
 @app.route("/")
@@ -152,7 +227,23 @@ def demand():
 
     return render_template("demand.html", prediction=prediction, error=error)
 
-
+@app.route("/recommend", methods=["GET","POST"])
+def recommend():
+    result = error = None
+    if request.method == "POST":
+        try:
+            user = {
+            'Preferences':      request.form['prefs'],
+            'Gender':           request.form['gender'],
+            'NumberOfAdults':   int(request.form['adults']),
+            'NumberOfChildren': int(request.form['kids']),
+            }
+            df_rec = recommend_destinations(user, top_k=5)
+            result = df_rec.to_dict(orient='records')
+        except Exception as e:
+            error = f"Hubo un problema: {e}"
+    return render_template("recommend.html", result=result, error=error)
+   
 # -------------------------------------------------------------------
 # Arranque local
 # -------------------------------------------------------------------
