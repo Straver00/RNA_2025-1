@@ -1,0 +1,6 @@
+google-genai
+pillow
+python-dotenv
+numpy
+matplotlib
+scikit-image
