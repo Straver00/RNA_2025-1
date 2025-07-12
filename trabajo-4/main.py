@@ -35,9 +35,11 @@ history, prompt_image = generate_story_from_natural_language(
 # Generamos la imagen a partir del prompt generado
 image = generate_image_from_prompt(client_image, prompt_image)
 
-# Abrimos la imagen con scikit-image
+# Guardamos la imagen en un archivo con scikit-image
 if image is not None:
-    skimage.io.imshow(image)
-    skimage.io.show()
+    skimage.io.imsave("generated_image.png", image)
+    print("Imagen guardada como 'generated_image.png'.")
+else:
+    print("No se pudo generar la imagen. Verifique el prompt o la configuración del modelo.")
 
 print("Historia e imagen generadas con éxito.")
