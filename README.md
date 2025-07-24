@@ -163,3 +163,10 @@ Para dudas o sugerencias, contacta al equipo de desarrollo:
 - GitHub: https://github.com/stjuliod09/RNA_Trabajo-3
 
 ## Trabajo 4: Aplicaciones de grandes modelos de lenguaje
+
+Este min-pryecto trata básicamente de la creación de un agente con arquitectura rápida y sencilla (sin framework específico de agentes IA), el cual tiene la capacidad de asistir con tareas de generación de historias. Para esto emplea la API de Gemini, la cual permite con sus múltiples modelos generar tanto texto como imagen.
+
+La estructura del proyecto es:
+
+- `story_generator.py` : Archivo con las funciones para generar la historia, usando las SDK de Google para Gemini, y haciendo controles de filtros, flujos y captación de errores.
+- `app.py`: Script del aplicativo web con framework de Flask.
